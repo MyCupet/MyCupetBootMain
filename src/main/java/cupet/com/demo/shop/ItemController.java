@@ -14,7 +14,7 @@ public class ItemController {
     @Autowired
     ProdRepository prodRepository;
 
-    @GetMapping("/api/items")
+    @GetMapping("/api1/items")
     public List <cupetshopproductVO> getItems(){
         List<cupetshopproductVO> cupetshopproduct = prodRepository.findAll();
         return cupetshopproduct;
