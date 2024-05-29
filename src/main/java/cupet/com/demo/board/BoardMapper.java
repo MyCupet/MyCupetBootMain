@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository("boardMapper")
 public interface BoardMapper {
-	@Select("select *, u.cupet_user_name from cupetboard b join cupetuser u where b.cupet_user_id = u.cupet_user_id")
+	@Select("select b.*, u.cupet_user_name from cupetboard b join cupetuser u where b.cupet_user_id = u.cupet_user_id")
 	List<BoardVO> getBoardlist();
 }
