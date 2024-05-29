@@ -1,4 +1,4 @@
-package cupet.com.demo.entity;
+package cupet.com.demo.shop;
 
 
 import lombok.Data;

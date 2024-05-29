@@ -1,4 +1,4 @@
-package cupet.com.demo.mapper;
+package cupet.com.demo.shop;
 
 import java.util.List;
 
@@ -6,8 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
-import cupet.com.demo.entity.ShopVO;
-import cupet.com.demo.page.PageRequestVO;
+import cupet.com.demo.dto.PageRequestVO;
 
 @Mapper
 @Repository("shopMapper")

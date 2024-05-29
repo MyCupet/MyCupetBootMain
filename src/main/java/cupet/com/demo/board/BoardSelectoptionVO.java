@@ -1,4 +1,4 @@
-package cupet.com.demo.vo;
+package cupet.com.demo.board;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class cupetboard_selectoptionVO {
+public class BoardSelectoptionVO {
     public int cupet_board_head_no;
     public String cupet_board_head_name;
 }

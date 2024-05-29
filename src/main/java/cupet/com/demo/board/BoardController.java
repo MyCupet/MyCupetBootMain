@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import cupet.com.demo.board.selectoption.SelectoptionService;
-import cupet.com.demo.mapper.SelectoptionMapper;
-import cupet.com.demo.vo.cupetboard_selectoptionVO;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -27,7 +25,7 @@ public class BoardController {
         System.out.println("셀렉트 옵션 리스트 추출");
         Map<String, Object> result = new HashMap<>();
         try {
-            List<cupetboard_selectoptionVO> options = selectoptionService.selectoptionList();
+            List<BoardSelectoptionVO> options = selectoptionService.selectoptionList();
             result.put("list", options);
             result.put("status", true);
         } catch (Exception e) {

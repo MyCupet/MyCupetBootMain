@@ -1,4 +1,4 @@
-package cupet.com.demo.page;
+package cupet.com.demo.dto;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

@@ -3,11 +3,8 @@ package cupet.com.demo.shop;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
-import cupet.com.demo.entity.ShopVO;
-import cupet.com.demo.mapper.ShopMapper;
-import cupet.com.demo.page.PageRequestVO;
-import cupet.com.demo.page.PageResponseVO;
-
+import cupet.com.demo.dto.PageRequestVO;
+import cupet.com.demo.dto.PageResponseVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

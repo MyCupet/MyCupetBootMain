@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("cupet.com.demo.mapper")
+@MapperScan("cupet.com.demo")
 public class MyCupetBootMainApplication {
 
 	public static void main(String[] args) {
