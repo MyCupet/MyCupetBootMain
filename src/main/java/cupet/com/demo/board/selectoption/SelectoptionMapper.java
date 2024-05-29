@@ -1,4 +1,4 @@
-package cupet.com.demo.board;
+package cupet.com.demo.board.selectoption;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface SelectoptionMapper {
 
 	@Select("select * from cupetboard_head")
-	List<BoardSelectoptionVO> getSelectoptionlist();
+	List<SelectoptionVO> getSelectoptionlist();
 
 }

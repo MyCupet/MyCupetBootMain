@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import cupet.com.demo.board.BoardSelectoptionVO;
-import cupet.com.demo.board.SelectoptionMapper;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -14,7 +12,7 @@ public class SelectoptionService {
 
  private final SelectoptionMapper selectoptionMapper;
 
- public List<BoardSelectoptionVO> selectoptionList() {
+ public List<SelectoptionVO> selectoptionList() {
      try {
          return selectoptionMapper.getSelectoptionlist();
      } catch (Exception e) {
