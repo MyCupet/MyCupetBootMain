@@ -25,12 +25,11 @@ import lombok.RequiredArgsConstructor;
 public class BoardController {
     private final SelectoptionService selectoptionService;
     private final BoardService boardService;
-    private final AuthService as;
+  
     @GetMapping("/selectoptionList")
     @ResponseBody
-    public Map<String, Object> selectoptionList(Model model, @RequestHeader("Authorization") String token) throws MyCupetBootMainException {
+    public Map<String, Object> selectoptionList(Model model) throws MyCupetBootMainException {
         System.out.println("셀렉트 옵션 리스트 추출");
-        System.out.println(as.AuthByUser(token));
       
         Map<String, Object> result = new HashMap<>();
         try {
