@@ -16,23 +16,25 @@ public class CartService {
 	private final CartMapper cartMapper;
 	
 	public PageResponseVO<CartVO> getList(PageRequestVO pageRequestVO) {
-    	List<CartVO> list = cartMapper.getList(pageRequestVO);
-    	int total = cartMapper.getTotalCount(pageRequestVO);
+    	List<CartVO> list = cartMapper.getCartList(pageRequestVO);
+    	int total = cartMapper.getCartTotalCount(pageRequestVO);
 
     	log.info("cart_list {} ", list);
     	log.info("cart_total = {} ", total);
 
-    	return new PageResponseVO<>(list ,total, pageRequestVO.getSize(), pageRequestVO.getPageNo());
+    	return new PageResponseVO<CartVO>(list ,total, pageRequestVO.getSize(), pageRequestVO.getPageNo());
     	}
-	
-	public 
-	
-	public int insert(CartVO cart) {
-		return cartMapper.insert(cart);
+	 
+	public List<CartVO> findById(String cupet_user_id) {
+		return cartMapper.findById(cupet_user_id);
 	}
 	
-	public int delete(CartVO cart)  {
-		return cartMapper.delete(cart);
-	}
+//	public int insert(CartVO cart) {
+//		return cartMapper.insert(cart);
+//	}
+//	
+//	public int delete(CartVO cart)  {
+//		return cartMapper.delete(cart);
+//	}
 	
 }

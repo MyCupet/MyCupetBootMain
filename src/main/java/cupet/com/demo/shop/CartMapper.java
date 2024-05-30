@@ -12,13 +12,13 @@ import cupet.com.demo.dto.PageRequestVO;
 public interface CartMapper {
 	
 	@Select("select * from cupetcart")
-	List<CartVO> getList(PageRequestVO pageRequestVO);
+	List<CartVO> getCartList(PageRequestVO pageRequestVO);
 	
-	@Select("select * from cupetcart")
-	List<CartVO> findById(String userId);
+	@Select("select * from cupetcart where cupet_user_id = #{cupet_user_id}")
+	List<CartVO> findById(String cupet_user_id);
 	
 	@Select("select count(*) from cupetcart")
-	int getTotalCount(PageRequestVO pageRequestVO);
+	int getCartTotalCount(PageRequestVO pageRequestVO);
 	
 	@Insert("insert into cupetcart shopVO")
 	int insert(CartVO cartVO);

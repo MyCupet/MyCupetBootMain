@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@RestController
+@RestController(value="ShopController")
 @RequestMapping("/api1")
 public class ShopController {
 	private final ShopService shopService;
@@ -20,7 +20,5 @@ public class ShopController {
     	PageResponseVO<ShopVO> pageResponseVO = shopService.getList(pageRequestVO);
     	return pageResponseVO;
     }
-    
-    
 	
 }
