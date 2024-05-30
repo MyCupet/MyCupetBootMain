@@ -9,16 +9,25 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class BoardService {
-	 private final BoardMapper boardMapper;
+    private final BoardMapper boardMapper;
 
-	 public List<BoardVO> boardList() {
-	     try {
-	         return boardMapper.getBoardlist();
-	     } catch (Exception e) {
-	         // 예외를 로깅하고 다시 던집니다.
-	         System.err.println("Error fetching select options: " + e.getMessage());
-	         e.printStackTrace();
-	         throw e;
-	     }
-	 }
+    public List<BoardVO> boardList() {
+        try {
+            return boardMapper.getBoardlist();
+        } catch (Exception e) {
+            System.err.println("Error fetching select options: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public BoardVO boardView(int cupet_board_no) {
+        try {
+            return boardMapper.getBoardview(cupet_board_no);
+        } catch (Exception e) {
+            System.err.println("Error fetching board view: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

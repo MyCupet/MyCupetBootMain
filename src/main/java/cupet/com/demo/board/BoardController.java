@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -49,7 +50,23 @@ public class BoardController {
             result.put("list", options);
             result.put("status", true);
         } catch (Exception e) {
-            // 예외가 발생한 경우에는 에러 메시지와 상태를 전달합니다.
+            result.put("error", e.getMessage());
+            result.put("status", false);
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @GetMapping("/boardView")
+    @ResponseBody
+    public Map<String, Object> boardView(@RequestParam("cupet_board_no") int cupet_board_no) {
+        System.out.println("보드 상세보기 추출");
+        Map<String, Object> result = new HashMap<>();
+        try {
+            BoardVO board = boardService.boardView(cupet_board_no);
+            result.put("board", board);
+            result.put("status", true);
+        } catch (Exception e) {
             result.put("error", e.getMessage());
             result.put("status", false);
             e.printStackTrace();
