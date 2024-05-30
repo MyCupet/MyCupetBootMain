@@ -23,4 +23,5 @@ public class ShopService {
 
     	return new PageResponseVO<>(list ,total, pageRequestVO.getSize(), pageRequestVO.getPageNo());
     	}
+
 	}

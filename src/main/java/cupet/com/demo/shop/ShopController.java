@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api1")
 public class ShopController {
 	private final ShopService shopService;
+	
     @GetMapping("/products")
     public PageResponseVO<ShopVO> getItems(PageRequestVO pageRequestVO){
     	PageResponseVO<ShopVO> pageResponseVO = shopService.getList(pageRequestVO);
