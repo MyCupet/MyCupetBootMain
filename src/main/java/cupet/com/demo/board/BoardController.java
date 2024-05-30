@@ -78,4 +78,38 @@ public class BoardController {
         }
         return result;
     }
+    
+    @GetMapping("/boardDelete")
+    @ResponseBody
+    public Map<String, Object> boardDelete(@RequestParam("cupet_board_no") int cupet_board_no) {
+        System.out.println("보드 삭제");
+        Map<String, Object> result = new HashMap<>();
+        try {
+            BoardVO board = boardService.boardDelete(cupet_board_no);
+            result.put("board", board);
+            result.put("status", true);
+        } catch (Exception e) {
+            result.put("error", e.getMessage());
+            result.put("status", false);
+            e.printStackTrace();
+        }
+        return result;
+    }
+    
+//    @GetMapping("/boardInsert")
+//    @ResponseBody
+//    public Map<String, Object> boardInsert(@RequestParam("cupet_board_no") int cupet_board_no) {
+//        System.out.println("보드 상세보기 추출");
+//        Map<String, Object> result = new HashMap<>();
+//        try {
+//            BoardVO board = boardService.boardInsert(cupet_board_no);
+//            result.put("board", board);
+//            result.put("status", true);
+//        } catch (Exception e) {
+//            result.put("error", e.getMessage());
+//            result.put("status", false);
+//            e.printStackTrace();
+//        }
+//        return result;
+//    }
 }
