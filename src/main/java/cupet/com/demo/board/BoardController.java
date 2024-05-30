@@ -6,10 +6,14 @@ import java.util.Map;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import cupet.com.demo.MyCupetBootMainException;
+import cupet.com.demo.auth.AuthProvider;
+import cupet.com.demo.auth.AuthService;
 import cupet.com.demo.board.selectoption.SelectoptionService;
 import cupet.com.demo.board.selectoption.SelectoptionVO;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +24,13 @@ import lombok.RequiredArgsConstructor;
 public class BoardController {
     private final SelectoptionService selectoptionService;
     private final BoardService boardService;
-    
+    private final AuthService as;
     @GetMapping("/selectoptionList")
     @ResponseBody
-    public Map<String, Object> selectoptionList(Model model) {
+    public Map<String, Object> selectoptionList(Model model, @RequestHeader("Authorization") String token) throws MyCupetBootMainException {
         System.out.println("셀렉트 옵션 리스트 추출");
+        System.out.println(as.AuthByUser(token));
+      
         Map<String, Object> result = new HashMap<>();
         try {
             List<SelectoptionVO> options = selectoptionService.selectoptionList();
