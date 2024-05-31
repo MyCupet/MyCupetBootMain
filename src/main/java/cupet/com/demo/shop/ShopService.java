@@ -25,7 +25,8 @@ public class ShopService {
     	}
 	
 	public List<ShopVO> findByNo(List<Integer> cupet_prodno) {
-		return shopMapper.findByNo(cupet_prodno);
+	    int[] prodnos = cupet_prodno.stream().mapToInt(Integer::intValue).toArray();
+	    List<ShopVO> k = shopMapper.findByNo(prodnos);
+	    return k;
 	}
-
-	}
+}

@@ -38,10 +38,11 @@ public class CartController {
 		Map<String, Object> m = authService.AuthByUser(jwt);
         String cupet_user_id =(String) m.get("cupet_user_id");
         List<CartVO> carts = cartService.findById(cupet_user_id);
-        System.out.println("carts : " + carts);
-        List<Integer> cupet_items = carts.stream().map(CartVO::getCupet_prodno).toList();
-        System.out.println("cupet_items" + cupet_items);
-        List<ShopVO> shop = shopService.findByNo(cupet_items);
+        System.out.println("carts = " + carts);
+        List<Integer> cupet_cart_itemsProd = carts.stream().map(CartVO::getCupet_prodno).toList();
+        System.out.println("cupet_cart_itemsProd = " + cupet_cart_itemsProd);
+        List<ShopVO> shop = shopService.findByNo(cupet_cart_itemsProd);
+        System.out.println("shop = " + shop);
 
         return new ResponseEntity<>(shop, HttpStatus.OK);
     }

@@ -23,7 +23,7 @@ public interface CartMapper {
 	@Insert("insert into cupetcart shopVO")
 	int insert(CartVO cartVO);
 	
-	@Delete("delete cupet_prod_no from cupetcart where cupet_produ_no = ${cupet_prod_no} ")
+	@Delete("delete cupet_prod_no from cupetcart where cupet_prod_no = #{cupet_prod_no} ")
 	int delete(CartVO cartVO);
 	
 	
