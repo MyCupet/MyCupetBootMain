@@ -1,6 +1,7 @@
 package cupet.com.demo.user;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 	private final AuthService authService;
 	private final PetService petService;
+	private final UserService userService;
 	
 	@PostMapping("/userView")
 	@ResponseBody
@@ -45,21 +47,21 @@ public class UserController {
 	}
 	
 	@GetMapping("/petView")
-    @ResponseBody
-    public Map<String, Object> petView(@RequestParam("cupet_user_id") String cupet_user_id, @RequestParam("cupet_pet_no") int cupet_pet_no) {
-        System.out.println("보드 상세보기 추출");
-        Map<String, Object> result = new HashMap<>();
-        try {
-            PetVO pet = petService.petView(cupet_user_id, cupet_pet_no);
-            result.put("pet", pet);
-            result.put("status", true);
-        } catch (Exception e) {
-            result.put("error", e.getMessage());
-            result.put("status", false);
-            e.printStackTrace();
-        }
-        return result;
-    }
+	@ResponseBody
+	public Map<String, Object> petView(@RequestParam("cupet_user_id") String cupet_user_id) {
+	    System.out.println("애완동물 목록 추출");
+	    Map<String, Object> result = new HashMap<>();
+	    try {
+	        List<PetVO> petView = petService.petView(cupet_user_id);
+	        result.put("petView", petView);
+	        result.put("status", true);
+	    } catch (Exception e) {
+	        result.put("error", e.getMessage());
+	        result.put("status", false);
+	        e.printStackTrace();
+	    }
+	    return result;
+	}
 	
 	@PostMapping("/petInsert")
     @ResponseBody
@@ -78,4 +80,57 @@ public class UserController {
         }
         return result;
     }
+	
+	@PostMapping("/petUpdate")
+	@ResponseBody
+	public Map<String, Object> petUpdate(@RequestBody PetVO petVO) {
+	    System.out.println("펫 정보 수정 요청 받음");
+	    Map<String, Object> result = new HashMap<>();
+	    try {
+	        // 펫 정보 수정 서비스 호출
+	        PetVO updatedPet = petService.petUpdate(petVO);
+	        result.put("pet", updatedPet);
+	        result.put("status", true);
+	    } catch (Exception e) {
+	        result.put("error", e.getMessage());
+	        result.put("status", false);
+	        e.printStackTrace();
+	    }
+	    return result;
+	}
+	
+	@GetMapping("/petDelete")
+	@ResponseBody
+	public Map<String, Object> petDelete(@RequestParam("cupet_pet_no") int cupet_pet_no) {
+	    System.out.println("애완동물 삭제 요청");
+	    Map<String, Object> result = new HashMap<>();
+	    try {
+	        int petDelete = petService.petDelete(cupet_pet_no);
+	        result.put("petDelete", petDelete);
+	        result.put("status", true);
+	    } catch (Exception e) {
+	        result.put("error", e.getMessage());
+	        result.put("status", false);
+	        e.printStackTrace();
+	    }
+	    return result;
+	}
+	
+	@PostMapping("/userUpdate")
+	@ResponseBody
+	public Map<String, Object> userUpdate(@RequestBody UserVO userVO) {
+	    System.out.println("사용자 정보 수정 요청 받음");
+	    Map<String, Object> result = new HashMap<>();
+	    try {
+	        // 펫 정보 수정 서비스 호출
+	        UserVO updatedUser = userService.userUpdate(userVO);
+	        result.put("user", updatedUser);
+	        result.put("status", true);
+	    } catch (Exception e) {
+	        result.put("error", e.getMessage());
+	        result.put("status", false);
+	        e.printStackTrace();
+	    }
+	    return result;
+	}
 }
