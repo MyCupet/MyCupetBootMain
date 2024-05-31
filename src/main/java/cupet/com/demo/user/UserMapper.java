@@ -1,8 +1,10 @@
 package cupet.com.demo.user;
 
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
+@Mapper
+@Repository("userMapper")
 public interface UserMapper {
-   @Select("SELECT * FROM cupetuser WHERE cupet_user_id = #{cupet_user_id}")
-    UserVO getUserview(String cupet_user_id);
+   
 }
