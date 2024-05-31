@@ -22,9 +22,9 @@ public interface BoardMapper {
     BoardVO getBoarddelete(int cupet_board_no);
     
     
-//    @Insert("INSERT INTO mycupet.cupetboard (cupet_board_title, cupet_board_content, cupet_board_head_no, cupet_user_id) values (#{cupet_board_title}, #{cupet_board_content}, #{cupet_board_head_no}, #{cupet_user_id})")
-//    BoardVO getBoardinsert(BoardVO board);
-//    
+    @Insert("INSERT INTO mycupet.cupetboard (cupet_board_title, cupet_board_content, cupet_board_head_no, cupet_user_id) values (#{cupet_board_title}, #{cupet_board_content}, #{cupet_board_head_no}, #{cupet_user_id})")
+    BoardVO getBoardinsert(BoardVO boardVO);
+    
 //    @Update("")
 //    BoardVO getBoardupdate(BoardVO board);
     

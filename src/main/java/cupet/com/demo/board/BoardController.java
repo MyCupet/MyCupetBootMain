@@ -96,20 +96,20 @@ public class BoardController {
         return result;
     }
     
-//    @GetMapping("/boardInsert")
-//    @ResponseBody
-//    public Map<String, Object> boardInsert(@RequestParam("cupet_board_no") int cupet_board_no) {
-//        System.out.println("보드 상세보기 추출");
-//        Map<String, Object> result = new HashMap<>();
-//        try {
-//            BoardVO board = boardService.boardInsert(cupet_board_no);
-//            result.put("board", board);
-//            result.put("status", true);
-//        } catch (Exception e) {
-//            result.put("error", e.getMessage());
-//            result.put("status", false);
-//            e.printStackTrace();
-//        }
-//        return result;
-//    }
+    @GetMapping("/boardInsert")
+    @ResponseBody
+    public Map<String, Object> boardInsert(BoardVO boardVO) {
+        System.out.println("보드 상세보기 추출");
+        Map<String, Object> result = new HashMap<>();
+        try {
+            boardVO = boardService.boardInsert(boardVO);
+            result.put("board", boardVO);
+            result.put("status", true);
+        } catch (Exception e) {
+            result.put("error", e.getMessage());
+            result.put("status", false);
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
