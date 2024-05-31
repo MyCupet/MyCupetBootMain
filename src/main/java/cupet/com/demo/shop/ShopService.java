@@ -23,4 +23,10 @@ public class ShopService {
 
     	return new PageResponseVO<>(list ,total, pageRequestVO.getSize(), pageRequestVO.getPageNo());
     	}
+	
+	public List<ShopVO> findByNo(List<Integer> cupet_prodno) {
+	    int[] prodnos = cupet_prodno.stream().mapToInt(Integer::intValue).toArray();
+	    List<ShopVO> k = shopMapper.findByNo(prodnos);
+	    return k;
 	}
+}

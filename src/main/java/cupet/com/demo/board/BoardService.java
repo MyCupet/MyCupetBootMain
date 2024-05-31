@@ -30,4 +30,24 @@ public class BoardService {
             throw e;
         }
     }
+    
+    public BoardVO boardDelete(int cupet_board_no) {
+        try {
+            return boardMapper.getBoarddelete(cupet_board_no);
+        } catch (Exception e) {
+            System.err.println("Error fetching board delete: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+    
+    public BoardVO boardInsert(BoardVO boardVO) {
+        try {
+            return boardMapper.getBoardinsert(boardVO);
+        } catch (Exception e) {
+            System.err.println("Error fetching board view: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

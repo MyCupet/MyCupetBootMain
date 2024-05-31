@@ -16,4 +16,15 @@ public interface ShopMapper {
 	
 	@Select("select count(*) from cupetshop")
 	int getTotalCount(PageRequestVO pageRequestVO);
+	
+	@Select({
+	    "<script>",
+	    "select * from cupetshop where cupet_prodno in",
+	    "<foreach item='item' index='index' collection='array' open='(' separator=',' close=')'>",
+	    "#{item}",
+	    "</foreach>",
+	    "</script>"
+	})
+	List<ShopVO> findByNo(int[] prodnos);
+	
 }
