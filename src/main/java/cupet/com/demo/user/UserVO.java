@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UserVO {
-   public String cupet_user_id;
-    public String cupet_userpwd;
-    public String cupet_user_name;
-    public String cupet_user_nickname;
-    public String cupet_user_address;
-    public String cupet_user_gender;
-    public String cupet_user_phonenumber;
-    public int cupet_user_point;
-    public String cupet_user_principle;
-    public String cupet_user_birth;
+	public String cupet_user_id;
+	public String cupet_userpwd;
+	public String cupet_user_name;
+	public String cupet_user_nickname;
+	public String cupet_user_address;
+	public String cupet_user_gender;
+	public String cupet_user_phonenumber;
+	public int cupet_user_point;
+	public String cupet_user_principle;
+	public String cupet_user_birth;
 }
