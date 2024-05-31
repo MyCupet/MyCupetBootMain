@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 @Mapper
-@Repository
+@Repository("userMapper")
 public interface UserMapper {
     @Update("UPDATE cupetuser SET cupet_user_nickname = #{user.cupet_user_nickname}, " +
             "cupet_user_name = #{user.cupet_user_name}, " +
