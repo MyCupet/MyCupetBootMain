@@ -6,15 +6,13 @@ import java.util.Map;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import cupet.com.demo.MyCupetBootMainException;
-import cupet.com.demo.auth.AuthProvider;
-import cupet.com.demo.auth.AuthService;
+
 import cupet.com.demo.board.selectoption.SelectoptionService;
 import cupet.com.demo.board.selectoption.SelectoptionVO;
 import lombok.RequiredArgsConstructor;
@@ -99,7 +97,7 @@ public class BoardController {
     @GetMapping("/boardInsert")
     @ResponseBody
     public Map<String, Object> boardInsert(BoardVO boardVO) {
-        System.out.println("보드 상세보기 추출");
+        System.out.println("보드 insert");
         Map<String, Object> result = new HashMap<>();
         try {
             boardVO = boardService.boardInsert(boardVO);

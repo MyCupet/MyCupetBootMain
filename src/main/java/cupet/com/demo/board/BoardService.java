@@ -45,7 +45,7 @@ public class BoardService {
         try {
             return boardMapper.getBoardinsert(boardVO);
         } catch (Exception e) {
-            System.err.println("Error fetching board view: " + e.getMessage());
+            System.err.println("Error fetching board insert: " + e.getMessage());
             e.printStackTrace();
             throw e;
         }
