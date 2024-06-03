@@ -24,26 +24,12 @@ public class CartController {
 	private final ShopService shopService;
 	private final CartService cartService;
 	private final AuthService authService;
-	
-	
-	@PostMapping("/items2")
-    public String test(@RequestBody List<String> req) {
-		
-		System.out.println(req);
-		
-		return "";
-		
-		
-    }
-	
-	
 
 	@PostMapping("/items")
     public ResponseEntity getCartItems(@RequestHeader ("Authorization") String jwt, @CookieValue(value = "token", required = false) String token, 
     		PageRequestVO pageRequestVO) throws MyCupetBootMainException {
 		Map<String, Object> m = authService.AuthByUser(jwt);
         String cupet_user_id =(String) m.get("cupet_user_id");
-        //List<CartVO> carts = cartService.findById(cupet_user_id);
         
         //1 userid를 이용해서 cartno를 가져옴 (cupetuser랑 cupetcart테이블)
         List<CartVO> cart1 = cartService.findByUserId(cupet_user_id); //cart1 = CartVO 형태의 자료가 1개 있음 1:1 userid, cartNo
@@ -58,41 +44,37 @@ public class CartController {
         return new ResponseEntity<>(cart4, HttpStatus.OK);
     }
     
-//    @PostMapping("/items/{cupet_prodno}")
-//    public ResponseEntity pushCartItem(@RequestHeader ("Authorization") String jwt, @PathVariable("cupet_prodno") int cupet_prodno,
-//            @CookieValue(value = "token", required = false) String token)throws MyCupetBootMainException {
-//
-//    	Map<String, Object> m = authService.AuthByUser(jwt);
-//        String cupet_user_id =(String) m.get("cupet_user_id");
-//        
-//        //1. shop이랑 cartproduct를 prodno로 연결
-//        
-//        
-//        //List<CartVO>cart = cartService.findByIdAndProdno(cupet_user_id, cupet_prodno);
-//        List<CartVO>cart = cartService.findByProdno(cupet_prodno);
-//        System.out.println("cart = " + cart);
-//        
-//        //id에 할당된 cart_no가 없으면 만들어줌
-//        if (cart.isEmpty()) {
-//            CartVO newCart = new CartVO();
-//            newCart.setCupet_user_id(cupet_user_id);
-//            newCart.setCupet_prodno(cupet_prodno);
-//            cartRepository.save(newCart);
-//        }
-//
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+    @PostMapping("/items/{cupet_prodno}")
+    public ResponseEntity pushCartItem(@RequestHeader ("Authorization") String jwt, @PathVariable("cupet_prodno") int cupet_prodno,
+            @CookieValue(value = "token", required = false) String token)throws MyCupetBootMainException {
+
+    	Map<String, Object> m = authService.AuthByUser(jwt);
+        String cupet_user_id =(String) m.get("cupet_user_id");
+        
+        //할당된 cartno찾기
+        List<CartVO> cart = cartService.findByUserId(cupet_user_id);
+        //id에 할당된 cart_no가 없으면 만들어줌
+        if (cart.isEmpty()) { cartService.newUserAddtoCart(cupet_user_id); }
+        List<Integer> cartnumber = cart.stream().map(CartVO::getCupet_cart_no).toList();
+        int cart_no = cartnumber.get(0).intValue();
+
+        // cartproduct 테이블에 cartnumber와 shop의 prodno를 넣기
+        CartProdVO cartProdVO = new CartProdVO();
+        cartProdVO.setCupet_cart_no(cart_no);
+        cartProdVO.setCupet_prodno(cupet_prodno);
+        cartProdVO.setCupet_cartproduct_amount(1); // 수량 설정, 필요에 따라 변경 가능
+
+        cartService.insert(cartProdVO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
     
-//    @DeleteMapping("/items/{cupet_prodno}")
-//    public ResponseEntity removeCartItem(@RequestHeader ("Authorization") String jwt, @PathVariable("cupet_prodno") int cupet_prodno,
+//    @DeleteMapping("/items/{cupet_cartprouct_no}")
+//    public ResponseEntity removeCartItem(@RequestHeader ("Authorization") String jwt, @PathVariable("cupet_cartprouct_no") int cupet_cartprouct_no,
 //            @CookieValue(value = "token", required = false) String token)throws MyCupetBootMainException {
 //    	Map<String, Object> m = authService.AuthByUser(jwt);
 //        String cupet_user_id =(String) m.get("cupet_user_id");
-//        
-//        CartVO cart = (CartVO) cartService.findByIdAndProdno(cupet_user_id, cupet_prodno);
-//        System.out.println("카트 = " + cart);
 //
-//        cartService.delete(cart);
+//        cartService.delete(cupet_cartprouct_no);
 //        return new ResponseEntity<>(HttpStatus.OK);
 //    }
 
