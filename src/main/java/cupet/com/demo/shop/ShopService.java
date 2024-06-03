@@ -18,13 +18,10 @@ public class ShopService {
     	List<ShopVO> list = shopMapper.getList(pageRequestVO);
     	int total = shopMapper.getTotalCount(pageRequestVO);
 
-    	log.info("list {} ", list);
-    	log.info("total = {} ", total);
-
     	return new PageResponseVO<>(list ,total, pageRequestVO.getSize(), pageRequestVO.getPageNo());
     	}
 	
-	public List<ShopVO> findByNo(List<Integer> cupet_prodno) {
+	public List<ShopVO> findByProdNo(List<Integer> cupet_prodno) {
 	    int[] prodnos = cupet_prodno.stream().mapToInt(Integer::intValue).toArray();
 	    List<ShopVO> k = shopMapper.findByNo(prodnos);
 	    return k;

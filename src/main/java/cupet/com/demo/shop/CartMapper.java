@@ -11,20 +11,41 @@ import cupet.com.demo.dto.PageRequestVO;
 @Repository("cartMapper")
 public interface CartMapper {
 	
+	//전체 불러오기
 	@Select("select * from cupetcart")
 	List<CartVO> getCartList(PageRequestVO pageRequestVO);
 	
+	//할당된 cartno불러오기
 	@Select("select * from cupetcart where cupet_user_id = #{cupet_user_id}")
-	List<CartVO> findById(String cupet_user_id);
+	List<CartVO> findByUserId(String cupet_user_id);
+	
+	//새 카트 할당
+	@Insert("insert into cupetcart (cupet_user_id) values (#{cupet_user_id})")
+    @Options(useGeneratedKeys = true, keyProperty = "cupet_cart_no")
+    int newUserAddtoCart(CartVO cart);
+	//cartno를 이용해서 cartproductno랑 연결
+	@Select({"<script>","select * from cupetcartproduct where cupet_cart_no in",
+		"<foreach item='item' index='index' collection='cartt' open='(' separator=',' close=')'>","#{item}","</foreach>","</script>"})
+	List<CartProdVO> findByCartNo(@Param("cartt") List<Integer> cartt);
+
+	@Select("select * from cupetcart where cupet_user_id = #{cupet_user_id}")
+	List<CartProdVO> findById(String cupet_user_id);
+
+	@Select("select * from cupetshop where cupet_prodno = #{cupet_prodno}")
+	List<CartVO> findByProdno(int cupet_prodno);
+	
+	@Select("select * from cupetshop where cupet_user_id = #{arg0} and cupet_prodno = #{arg1}")
+	List<CartVO> findByIdAndProdno(String cupet_user_id, int cupet_prodno);
 	
 	@Select("select count(*) from cupetcart")
 	int getCartTotalCount(PageRequestVO pageRequestVO);
+
+	@Insert("INSERT INTO cupetcartproduct (cupet_cart_no, cupet_prodno, cupet_cartproduct_amount) " +
+            "VALUES (#{cupet_cart_no}, #{cupet_prodno}, #{cupet_cartproduct_amount})")
+    @Options(keyProperty = "cupet_cartproduct_no")
+    int insert(CartProdVO cartProd);
 	
-	@Insert("insert into cupetcart shopVO")
-	int insert(CartVO cartVO);
-	
-	@Delete("delete cupet_prod_no from cupetcart where cupet_prod_no = #{cupet_prod_no} ")
-	int delete(CartVO cartVO);
-	
+	@Delete("DELETE FROM cupetcartproduct WHERE cupet_cartprouct_no = #{cupet_cartprouct_no}")
+    int delete(@Param("cupet_cartprouct_no") int cupet_cartprouct_no);
 	
 }
