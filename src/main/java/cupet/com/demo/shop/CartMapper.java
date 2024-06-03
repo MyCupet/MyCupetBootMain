@@ -45,7 +45,10 @@ public interface CartMapper {
     @Options(keyProperty = "cupet_cartproduct_no")
     int insert(CartProdVO cartProd);
 	
-	@Delete("DELETE FROM cupetcartproduct WHERE cupet_cartprouct_no = #{cupet_cartprouct_no}")
-    int delete(@Param("cupet_cartprouct_no") int cupet_cartprouct_no);
+	@Delete("DELETE FROM cupetcartproduct WHERE cupet_cartproduct_no = #{cartprodnum}")
+    int delete(int cartprodnum);
+	
+	@Select("select * from cupetcartproduct where cupet_cart_no = #{arg0} and cupet_prodno = #{arg1}")
+	List<CartProdVO> findByCartnoAndProdno(int cart_no, int cupet_prodno);
 	
 }
