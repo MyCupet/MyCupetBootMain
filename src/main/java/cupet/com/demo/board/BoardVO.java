@@ -19,3 +19,4 @@ public class BoardVO {
     public String cupet_user_id;
     public String cupet_user_name;
 }
+//commit이 안된다
