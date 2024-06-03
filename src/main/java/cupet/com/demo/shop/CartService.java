@@ -54,7 +54,11 @@ public class CartService {
 		return cartMapper.findByIdAndProdno(id, prodno);
 	}
 	
-	public int delete(int cupet_cartprouct_no) {
-		return cartMapper.delete(cupet_cartprouct_no);
+	public int delete(int cartprodnum) {
+		return cartMapper.delete(cartprodnum);
+	}
+	
+	public List<CartProdVO>findByCartnoAndProdno(int cart_no, int cupet_prodno) {
+		return cartMapper.findByCartnoAndProdno(cart_no, cupet_prodno);
 	}
 }

@@ -68,15 +68,28 @@ public class CartController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
-//    @DeleteMapping("/items/{cupet_cartprouct_no}")
-//    public ResponseEntity removeCartItem(@RequestHeader ("Authorization") String jwt, @PathVariable("cupet_cartprouct_no") int cupet_cartprouct_no,
-//            @CookieValue(value = "token", required = false) String token)throws MyCupetBootMainException {
-//    	Map<String, Object> m = authService.AuthByUser(jwt);
-//        String cupet_user_id =(String) m.get("cupet_user_id");
-//
-//        cartService.delete(cupet_cartprouct_no);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+    @DeleteMapping("/items/{cupet_prodno}")
+    public ResponseEntity removeCartItem(@RequestHeader ("Authorization") String jwt, @PathVariable("cupet_prodno") int cupet_prodno,
+            @CookieValue(value = "token", required = false) String token)throws MyCupetBootMainException {
+    	Map<String, Object> m = authService.AuthByUser(jwt);
+        String cupet_user_id =(String) m.get("cupet_user_id");
+        
+        //1. 로그인한 아이디로 cart_no 알아내기
+        List<CartVO> cart = cartService.findByUserId(cupet_user_id);
+        List<Integer> cartnumber = cart.stream().map(CartVO::getCupet_cart_no).toList();
+        int cart_no = cartnumber.get(0).intValue();
+        
+        //2. cart_no와 axios로 받은 prodno로 cart_produrct_no  알아내기
+        List<CartProdVO> cart2 = cartService.findByCartnoAndProdno(cart_no, cupet_prodno);
+        List<Integer> cart3 = cart2.stream().map(CartProdVO::getCupet_cartproduct_no).toList();
+        int cartprodnum = cart3.get(0).intValue();
+        System.out.println("카트프로덕트넘버:"+cartprodnum);
+        
+        //3. cartproductno 가 일치하는 모든 데이터 삭제
+        cartService.delete(cartprodnum);
+        
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 	
 }
