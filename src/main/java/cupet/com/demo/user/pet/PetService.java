@@ -45,7 +45,7 @@ public class PetService {
     
     public int petDelete(int cupet_pet_no) {
         try {
-            petMapper.deletePet(cupet_pet_no);
+            petMapper.deletePet(Integer.valueOf(cupet_pet_no));
             return cupet_pet_no;
         } catch (Exception e) {
             System.err.println("Error deleting pet: " + e.getMessage());

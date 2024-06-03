@@ -19,4 +19,15 @@ public class UserService {
             throw e;
         }
     }
+	
+	public String userDelete(String cupet_user_id) {
+        try {
+            userMapper.deleteUser(cupet_user_id);
+            return cupet_user_id;
+        } catch (Exception e) {
+            System.err.println("Error deleting pet: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }
