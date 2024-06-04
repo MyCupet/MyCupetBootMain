@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cupet.com.demo.MyCupetBootMainException;
-import cupet.com.demo.dto.UserVO;
 import lombok.RequiredArgsConstructor;
 
 @Service

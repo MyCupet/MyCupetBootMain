@@ -11,7 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import cupet.com.demo.dto.CupetUserAddressVO;
 import cupet.com.demo.dto.MissingPetVO;
-import cupet.com.demo.dto.UserVO;
+import cupet.com.demo.user.UserVO;
+
 
 @Mapper
 @Repository("findPetMapper")

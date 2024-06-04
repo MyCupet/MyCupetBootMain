@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import cupet.com.demo.dto.CupetUserAddressVO;
 import cupet.com.demo.dto.MissingPetVO;
-import cupet.com.demo.dto.UserVO;
+import cupet.com.demo.user.UserVO;
 import cupet.com.demo.user.pet.PetMapper;
 import cupet.com.demo.user.pet.PetVO;
 import lombok.RequiredArgsConstructor;
