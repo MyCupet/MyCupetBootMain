@@ -6,13 +6,16 @@ import java.util.Map;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import cupet.com.demo.MyCupetBootMainException;
-
+import cupet.com.demo.auth.AuthService;
 import cupet.com.demo.board.selectoption.SelectoptionService;
 import cupet.com.demo.board.selectoption.SelectoptionVO;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,8 @@ import lombok.RequiredArgsConstructor;
 public class BoardController {
     private final SelectoptionService selectoptionService;
     private final BoardService boardService;
+	private final AuthService authService;
+
   
     @GetMapping("/selectoptionList")
     @ResponseBody
@@ -79,35 +84,56 @@ public class BoardController {
     
     @GetMapping("/boardDelete")
     @ResponseBody
-    public Map<String, Object> boardDelete(@RequestParam("cupet_board_no") int cupet_board_no) {
+    public String boardDelete(@RequestParam("cupet_board_no") int cupet_board_no) {
         System.out.println("보드 삭제");
         Map<String, Object> result = new HashMap<>();
         try {
-            BoardVO board = boardService.boardDelete(cupet_board_no);
-            result.put("board", board);
+            int status = boardService.boardDelete(cupet_board_no);
             result.put("status", true);
+            
+            if (status != 0 ) {
+            	return "성공";
+            } else {
+            	return "실패";
+            }
+       
         } catch (Exception e) {
             result.put("error", e.getMessage());
             result.put("status", false);
             e.printStackTrace();
         }
-        return result;
+        return "실패";
     }
     
-    @GetMapping("/boardInsert")
+    @PostMapping("/boardInsert")
     @ResponseBody
-    public Map<String, Object> boardInsert(BoardVO boardVO) {
+    public String boardInsert(@RequestHeader("Authorization") String token, @RequestBody Map<String, Object> contentData) {
         System.out.println("보드 insert");
+        Map<String, Object> userMap = new HashMap<>();
         Map<String, Object> result = new HashMap<>();
+
+
+
         try {
-            boardVO = boardService.boardInsert(boardVO);
-            result.put("board", boardVO);
+        	userMap = authService.AuthByUser(token);
+        	String cupet_user_id = (String)userMap.get("cupet_user_id");
+        	System.out.println(contentData);
+        	
+        	contentData.put("cupet_user_id", cupet_user_id);
+        	int status = boardService.boardInsert(contentData);
             result.put("status", true);
+        	
+        	if (status != 0 ) {
+            	return "성공";
+            } else {
+            	return "실패";
+            }
+       
         } catch (Exception e) {
             result.put("error", e.getMessage());
             result.put("status", false);
             e.printStackTrace();
         }
-        return result;
+        return "실패";
     }
 }

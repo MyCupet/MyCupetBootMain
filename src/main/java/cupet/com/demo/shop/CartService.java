@@ -2,6 +2,7 @@ package cupet.com.demo.shop;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import cupet.com.demo.dto.PageRequestVO;
@@ -15,26 +16,45 @@ import lombok.extern.slf4j.Slf4j;
 public class CartService {
 	private final CartMapper cartMapper;
 	
+	//전체 불러오기
 	public PageResponseVO<CartVO> getList(PageRequestVO pageRequestVO) {
     	List<CartVO> list = cartMapper.getCartList(pageRequestVO);
     	int total = cartMapper.getCartTotalCount(pageRequestVO);
 
-    	log.info("cart_list {} ", list);
-    	log.info("cart_total = {} ", total);
-
     	return new PageResponseVO<CartVO>(list ,total, pageRequestVO.getSize(), pageRequestVO.getPageNo());
     	}
 	 
-	public List<CartVO> findById(String cupet_user_id) {
+	public List<CartVO> findByUserId(String cupet_user_id) {
+		return cartMapper.findByUserId(cupet_user_id);
+	}
+	
+	public List<CartProdVO> findByCartNo(List<Integer> cartt) {
+	    return cartMapper.findByCartNo(cartt);
+	}
+	//새 cart를 유저에게 할당
+	public int newUserAddtoCart(String cupet_user_id) {
+        CartVO newCart = new CartVO();
+        newCart.setCupet_user_id(cupet_user_id);
+        return cartMapper.newUserAddtoCart(newCart);
+    }
+	
+	public List<CartProdVO> findById(String cupet_user_id) {
 		return cartMapper.findById(cupet_user_id);
 	}
 	
-//	public int insert(CartVO cart) {
-//		return cartMapper.insert(cart);
-//	}
-//	
-//	public int delete(CartVO cart)  {
-//		return cartMapper.delete(cart);
-//	}
+	public List<CartVO> findByProdno(int cupet_prodno) {
+		return cartMapper.findByProdno(cupet_prodno);
+	}
 	
+	public int insert(CartProdVO cartProd) {
+		 return cartMapper.insert(cartProd);
+	}
+	
+	public List<CartVO> findByIdAndProdno(String id, int prodno) {
+		return cartMapper.findByIdAndProdno(id, prodno);
+	}
+	
+	public int delete(int cupet_cartprouct_no) {
+		return cartMapper.delete(cupet_cartprouct_no);
+	}
 }
