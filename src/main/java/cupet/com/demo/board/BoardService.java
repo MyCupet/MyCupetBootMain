@@ -1,6 +1,7 @@
 package cupet.com.demo.board;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -31,9 +32,10 @@ public class BoardService {
         }
     }
     
-    public BoardVO boardDelete(int cupet_board_no) {
+    public int boardDelete(int cupet_board_no) {
         try {
-            return boardMapper.getBoarddelete(cupet_board_no);
+            int status = boardMapper.getBoarddelete(cupet_board_no);
+            return status;
         } catch (Exception e) {
             System.err.println("Error fetching board delete: " + e.getMessage());
             e.printStackTrace();
@@ -41,9 +43,10 @@ public class BoardService {
         }
     }
     
-    public BoardVO boardInsert(BoardVO boardVO) {
+    public int boardInsert(Map<String, Object> contentData) {
         try {
-            return boardMapper.getBoardinsert(boardVO);
+        	int status = boardMapper.getBoardinsert(contentData);
+            return status;
         } catch (Exception e) {
             System.err.println("Error fetching board insert: " + e.getMessage());
             e.printStackTrace();
