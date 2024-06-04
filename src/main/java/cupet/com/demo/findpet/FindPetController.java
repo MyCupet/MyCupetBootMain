@@ -1,6 +1,8 @@
 package cupet.com.demo.findpet;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,9 @@ public class FindPetController implements MyCupetDbInterface {
 
 	}
 	
+	
+	
+	//유저의 위치정보를 가져오는 컨트롤러 
 	@GetMapping("/getUserLocate")
 	public Object userGetLocate(@RequestHeader ("Authorization") String token) {
 		System.out.println("유저로케이트 접근");
@@ -49,6 +54,7 @@ public class FindPetController implements MyCupetDbInterface {
 		}
 		String id = String.valueOf(temp.get(memberid));
 		System.out.println(id);
+		//유저의 위치정보를 가져오는 메서드
 		CupetUserAddressVO rescua = findPetService.userGetLocate(id);
 		if(rescua != null) {
 			res.put("UserLocate", rescua);
@@ -61,6 +67,23 @@ public class FindPetController implements MyCupetDbInterface {
 		return res;
 
 	}
+	
+	@PostMapping("/getMarkerList")
+	public Map<String, Object> missingPetinfoList(
+	    @RequestBody Map<String,Object> obj) {
+		System.out.println(obj);
+		String lat = (String)obj.get("lat");
+		String lng = (String)obj.get("lng");
+		Map<String,Object> response = new HashMap<>();
+		List<MissingPetVO> list = findPetService.getMarkerList(lat,lng);
+
+		response.put("markerList",list);
+		
+		System.out.println(response);
+	    return response;
+	}
+	
+	
 	
 	@PostMapping("/misiinPetInsert")
 	public Object misiinPetInsert(@RequestHeader ("Authorization") String token,@RequestBody MissingPetVO obj) {
@@ -98,6 +121,7 @@ public class FindPetController implements MyCupetDbInterface {
 		}
 		
 	}
+	
 	
 	
 }
