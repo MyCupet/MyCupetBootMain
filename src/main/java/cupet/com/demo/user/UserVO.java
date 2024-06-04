@@ -17,7 +17,7 @@ public class UserVO {
 	public String cupet_user_address;
 	public String cupet_user_gender;
 	public String cupet_user_phonenumber;
-	public int cupet_user_point;
+	public String cupet_user_point;
 	public String cupet_user_principle;
 	public String cupet_user_birth;
 }
