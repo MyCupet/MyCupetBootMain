@@ -6,13 +6,10 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import cupet.com.demo.MyCupetBootMainException;
 import cupet.com.demo.auth.AuthService;
 import cupet.com.demo.dto.PageRequestVO;
-import cupet.com.demo.dto.PageResponseVO;
-import cupet.com.demo.shop.CartVO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -83,7 +80,6 @@ public class CartController {
         List<CartProdVO> cart2 = cartService.findByCartnoAndProdno(cart_no, cupet_prodno);
         List<Integer> cart3 = cart2.stream().map(CartProdVO::getCupet_cartproduct_no).toList();
         int cartprodnum = cart3.get(0).intValue();
-        System.out.println("카트프로덕트넘버:"+cartprodnum);
         
         //3. cartproductno 가 일치하는 모든 데이터 삭제
         cartService.delete(cartprodnum);
