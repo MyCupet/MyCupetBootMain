@@ -20,7 +20,7 @@ public class UserVO {
 	private String cupet_user_gender;
 	private String cupet_user_phonenumber;
 	private String cupet_user_birth;
-	private int cupet_user_point;
+	private String cupet_user_point;
 	private String cupet_user_principle;
 
 }
