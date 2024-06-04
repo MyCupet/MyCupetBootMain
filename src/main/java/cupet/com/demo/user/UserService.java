@@ -20,6 +20,27 @@ public class UserService {
         }
     }
 	
+	public UserAddressVO userAddressUpdate(UserAddressVO userAddressVO) {
+        try {
+            userMapper.updateUserAddress(userAddressVO);
+            return userAddressVO;
+        } catch (Exception e) {
+            System.err.println("Error updating user address: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public UserAddressVO userAddressView(String cupet_user_id) {
+        try {
+            return userMapper.viewUserAddress(cupet_user_id);
+        } catch (Exception e) {
+            System.err.println("Error viewing user address: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+	
 	public String userDelete(String cupet_user_id) {
         try {
             userMapper.deleteUser(cupet_user_id);

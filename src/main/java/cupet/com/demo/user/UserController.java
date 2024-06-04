@@ -33,12 +33,14 @@ public class UserController {
         System.out.println("사용자 상세보기 추출");
         Map<String, Object> result = new HashMap<>();
         try {
-            // 토큰을 사용하여 사용자 정보 인증 및 추출
+            System.out.println("받은 토큰: " + token);
             result = authService.AuthByUser(token);
-            // 상태 추가
+            String cupet_user_id = (String) result.get("cupet_user_id");
+            System.out.println("사용자 ID: " + cupet_user_id);
+            UserAddressVO address = userService.userAddressView(cupet_user_id);
+            result.put("address", address);
             result.put("status", true);
         } catch (MyCupetBootMainException e) {
-            // 오류 처리
             result.put("error", e.getMessage());
             result.put("status", false);
             e.printStackTrace();
@@ -118,13 +120,15 @@ public class UserController {
 
     @PostMapping("/userUpdate")
     @ResponseBody
-    public Map<String, Object> userUpdate(@RequestBody UserVO userVO) {
+    public Map<String, Object> userUpdate(@RequestBody UserAllVO userAllVO) {
         System.out.println("사용자 정보 수정 요청 받음");
         Map<String, Object> result = new HashMap<>();
         try {
             // 사용자 정보 수정 서비스 호출
-            UserVO updatedUser = userService.userUpdate(userVO);
-            result.put("user", updatedUser);
+            userService.userUpdate(userAllVO.getUser());
+            userService.userAddressUpdate(userAllVO.getAddress());
+            result.put("user", userAllVO.getUser());
+            result.put("userAddress", userAllVO.getAddress());
             result.put("status", true);
         } catch (Exception e) {
             result.put("error", e.getMessage());
