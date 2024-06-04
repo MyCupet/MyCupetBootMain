@@ -38,4 +38,9 @@ public interface FindPetMapper {
 	List<MissingPetVO> getAllMissingPet(MissingPetVO ms);
 
 
+
+	@Select("select * from cupetpet_missing")
+	List<MissingPetVO> getMarkerList();
+
+
 }

@@ -61,4 +61,11 @@ public class FindPetService {
 		num =findPetMapper.findPetInsertPointDec(u);
 		return num;
 	}
+
+	public List<MissingPetVO> getMarkerList(String lat, String lng) {
+		
+		List<MissingPetVO> list = findPetMapper.getMarkerList();
+		System.out.println("missing pet list : "+list);
+		return list; 
+	}
 }
