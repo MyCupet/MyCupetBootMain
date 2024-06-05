@@ -83,6 +83,13 @@ public class FindPetController implements MyCupetDbInterface {
 	    return response;
 	}
 	
+	@PostMapping("/getPetDetailInfo")
+	public Map<String, Object> getPetDetailInfo(
+	    @RequestBody Map<String,String> obj) {
+		Map<String,Object> response  = findPetService.getPetDetailInfo(obj.get("petNo"));
+	    return response;
+	}
+	
 	
 	
 	@PostMapping("/misiinPetInsert")
