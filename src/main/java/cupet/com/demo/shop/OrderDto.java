@@ -1,11 +1,12 @@
 package cupet.com.demo.shop;
 
-import lombok.Getter;
+import lombok.*;
 
-@Getter
+@Data
 public class OrderDto {
-
     private String name;
     private String address;
     private String phone;
+    private int price;
+    private String date; // date 필드를 추가
 }
