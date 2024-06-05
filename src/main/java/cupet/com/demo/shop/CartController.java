@@ -50,6 +50,7 @@ public class CartController {
         
         //할당된 cartno찾기
         List<CartVO> cart = cartService.findByUserId(cupet_user_id);
+        
         //id에 할당된 cart_no가 없으면 만들어줌
         if (cart.isEmpty()) { cartService.newUserAddtoCart(cupet_user_id); }
         List<Integer> cartnumber = cart.stream().map(CartVO::getCupet_cart_no).toList();
