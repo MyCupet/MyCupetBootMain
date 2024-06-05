@@ -68,4 +68,10 @@ public class FindPetService {
 		System.out.println("missing pet list : "+list);
 		return list; 
 	}
+
+	public Map<String, Object> getPetDetailInfo(String petno) {
+		Map<String, Object> res = findPetMapper.getPetDetailInfo(petno);
+		System.out.println(res);
+		return res;
+	}
 }
