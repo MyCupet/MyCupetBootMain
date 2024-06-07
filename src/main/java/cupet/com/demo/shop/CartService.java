@@ -58,6 +58,11 @@ public class CartService {
 		return cartMapper.delete(cartprodnum);
 	}
 	
+	//장바구니 전체 삭제
+	public int deleteCartAll(int cartno) {
+		return cartMapper.deleteCartAll(cartno);
+	}
+	
 	public List<CartProdVO>findByCartnoAndProdno(int cart_no, int cupet_prodno) {
 		return cartMapper.findByCartnoAndProdno(cart_no, cupet_prodno);
 	}
