@@ -41,8 +41,8 @@ public interface CartMapper {
 	@Select("select count(*) from cupetcart")
 	int getCartTotalCount(PageRequestVO pageRequestVO);
 
-	@Insert("INSERT INTO cupetcartproduct (cupet_cart_no, cupet_prodno, cupet_cartproduct_amount) " +
-            "VALUES (#{cupet_cart_no}, #{cupet_prodno}, #{cupet_cartproduct_amount})")
+	@Insert("INSERT INTO cupetcartproduct (cupet_cart_no, cupet_prodno, cupet_cartprodcnt) " +
+            "VALUES (#{cupet_cart_no}, #{cupet_prodno}, #{cupet_cartprodcnt})")
     @Options(keyProperty = "cupet_cartproduct_no")
     int insert(CartProdVO cartProd);
 	
@@ -54,5 +54,9 @@ public interface CartMapper {
 	
 	@Select("select * from cupetcartproduct where cupet_cart_no = #{arg0} and cupet_prodno = #{arg1}")
 	List<CartProdVO> findByCartnoAndProdno(int cart_no, int cupet_prodno);
+	
+	
+	@Select("select * from cupetcartproduct where cupet_cart_no = #{cartnum}")
+	List<CartProdVO> getCartProd (int cartnum);
 	
 }
