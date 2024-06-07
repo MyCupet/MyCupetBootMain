@@ -21,29 +21,29 @@ public class ImageService {
     @Value("${spring.s3.bucket}")
     private String bucketName;
 
-    public Object getImage(String image_type, String image_id) {
-        return amazonS3Client.getUrl(bucketName, image_type + "/" + Long.valueOf(image_id));
+    public Object getImage(String image_type, String real_filename) {
+        return amazonS3Client.getUrl(bucketName, image_type + "/" + real_filename);
     }
 
     public String uploadCloudAndSaveToDb(String image_type, MultipartFile file, String use_id) throws IOException {
-        // Generate UUID for the file name
+        // 서버에 저장할 파일 이름을 생성 UUID
         String realFileName = UUID.randomUUID().toString();
 
-        // File metadata
+        // 파일 메타데이터 설정
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getSize());
         objectMetadata.setContentType(file.getContentType());
 
-        // S3 key
+        // 저장될 위치 + 파일명
         String key = image_type + "/" + realFileName;
 
-        // Upload to S3
+        // 클라우드에 파일 저장
         amazonS3Client.putObject(bucketName, key, file.getInputStream(), objectMetadata);
         amazonS3Client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
 
         String fileUrl = amazonS3Client.getUrl(bucketName, key).toString();
 
-        // Create ImageVO and insert into DB
+        // ImageVO 생성 후 DB에 저장
         ImageVO imageVO = ImageVO.builder()
                 .image_type(image_type)
                 .use_id(use_id)
@@ -54,9 +54,32 @@ public class ImageService {
                 .created_at(new Date())
                 .build();
 
+        // 이미지의 use_id와 동일한 데이터가 이미 존재하는지 확인
+        List<ImageVO> existingImages = imageMapper.getImageById(use_id);
+        if (!existingImages.isEmpty()) {
+            // 이미지가 존재하면 해당 이미지를 삭제
+            ImageVO existingImage = existingImages.get(0);
+            imageMapper.deleteImage(existingImage.getUse_id());
+            amazonS3Client.deleteObject(bucketName, existingImage.getImage_type() + "/" + existingImage.getReal_filename());
+        }
+
+        // 새 이미지 정보를 DB에 저장
         imageMapper.insertImage(imageVO);
 
         return fileUrl;
+    }
+    
+    public String deleteImage(String image_type, String use_id) {
+        List<ImageVO> existingImages = imageMapper.getImageById(use_id);
+        	
+        if (!existingImages.isEmpty()) {
+            // 이미지가 존재하면 해당 이미지를 삭제
+            ImageVO existingImage = existingImages.get(0);
+            imageMapper.deleteImage(existingImage.getUse_id());
+            amazonS3Client.deleteObject(bucketName, existingImage.getImage_type() + "/" + existingImage.getReal_filename());
+        }
+        
+        return use_id;
     }
 
     public List<ImageVO> getImageDetails(String use_id) {
