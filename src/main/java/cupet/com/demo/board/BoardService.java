@@ -34,7 +34,7 @@ public class BoardService {
     
     public int boardDelete(int cupet_board_no) {
         try {
-            int status = boardMapper.getBoarddelete(cupet_board_no);
+            int status = boardMapper.Boarddelete(cupet_board_no);
             return status;
         } catch (Exception e) {
             System.err.println("Error fetching board delete: " + e.getMessage());
@@ -45,7 +45,7 @@ public class BoardService {
     
     public int boardInsert(Map<String, Object> contentData) {
         try {
-        	int status = boardMapper.getBoardinsert(contentData);
+        	int status = boardMapper.Boardinsert(contentData);
             return status;
         } catch (Exception e) {
             System.err.println("Error fetching board insert: " + e.getMessage());
@@ -53,4 +53,27 @@ public class BoardService {
             throw e;
         }
     }
+    
+    
+    public int boardUpdate(Map<String, Object> contentData) {
+        try {
+        	//update한 사람의 user id
+        	String cupet_now_user_id = (String)contentData.get("cupet_user_id");
+        	//글 작성자의 user id
+        	String cupet_board_user_id = (boardMapper.getBoardview((int)contentData.get("cupet_board_no"))).cupet_user_id;
+        	
+        	if (cupet_now_user_id.equals(cupet_board_user_id)) {
+        		int status = boardMapper.getBoardupdate(contentData);
+        		return status;
+        	} else {
+        		return 0;
+        	}
+        
+        } catch (Exception e) {
+            System.err.println("Error fetching board update: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+    
 }

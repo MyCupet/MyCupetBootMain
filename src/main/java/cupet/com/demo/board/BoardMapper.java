@@ -20,13 +20,13 @@ public interface BoardMapper {
     BoardVO getBoardview(int cupet_board_no);
     
     @Delete("DELETE FROM cupetboard WHERE cupet_board_no=#{cupet_board_no}")
-    int getBoarddelete(int cupet_board_no);
+    int Boarddelete(int cupet_board_no);
     
     
     @Insert("INSERT INTO cupetboard (cupet_board_title, cupet_board_content, cupet_board_head_no, cupet_user_id) values (#{cupet_board_title}, #{cupet_board_content}, #{cupet_board_head_no}, #{cupet_user_id})")
-    int getBoardinsert(Map<String, Object> contentData);
+    int Boardinsert(Map<String, Object> contentData);
     
-//    @Update("")
-//    BoardVO getBoardupdate(BoardVO board);
+    @Update("UPDATE cupetboard SET cupet_board_title=#{cupet_board_title}, cupet_board_content=#{cupet_board_content}, cupet_board_head_no=#{cupet_board_head_no} WHERE cupet_board_no=#{cupet_board_no} ")
+    int getBoardupdate(Map<String, Object> contentData);
     
 }

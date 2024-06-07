@@ -136,4 +136,37 @@ public class BoardController {
         }
         return "실패";
     }
+    
+    
+    @PostMapping("/boardUpdate")
+    @ResponseBody
+    public String boardUpdate(@RequestHeader("Authorization") String token, @RequestBody Map<String, Object> contentData) {
+        System.out.println("보드 update");
+        Map<String, Object> userMap = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
+
+
+
+        try {
+        	userMap = authService.AuthByUser(token);
+        	String cupet_user_id = (String)userMap.get("cupet_user_id");
+        	System.out.println(contentData);
+        	
+        	contentData.put("cupet_user_id", cupet_user_id);
+        	int status = boardService.boardUpdate(contentData);
+            result.put("status", true);
+        	
+        	if (status != 0 ) {
+            	return "성공";
+            } else {
+            	return "실패";
+            }
+       
+        } catch (Exception e) {
+            result.put("error", e.getMessage());
+            result.put("status", false);
+            e.printStackTrace();
+        }
+        return "실패";
+    }
 }
