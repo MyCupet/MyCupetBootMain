@@ -24,7 +24,7 @@ public interface CartMapper {
     @Options(useGeneratedKeys = true, keyProperty = "cupet_cart_no")
     int newUserAddtoCart(CartVO cart);
 	
-	//cartno를 이용해서 cartproductno랑 연결
+	//cartno를 이용해서 cartproduct_no랑 연결
 	@Select({"<script>","select * from cupetcartproduct where cupet_cart_no in",
 		"<foreach item='item' index='index' collection='cartt' open='(' separator=',' close=')'>","#{item}","</foreach>","</script>"})
 	List<CartProdVO> findByCartNo(@Param("cartt") List<Integer> cartt);
@@ -55,8 +55,10 @@ public interface CartMapper {
 	@Select("select * from cupetcartproduct where cupet_cart_no = #{arg0} and cupet_prodno = #{arg1}")
 	List<CartProdVO> findByCartnoAndProdno(int cart_no, int cupet_prodno);
 	
-	
 	@Select("select * from cupetcartproduct where cupet_cart_no = #{cartnum}")
 	List<CartProdVO> getCartProd (int cartnum);
+	
+	@Update("update cupetcartproduct set cupet_cartprodcnt = #{arg1} where cupet_cartproduct_no = #{arg0}")
+	int updateQuantity(int cartprodnum, int newQuantity);
 	
 }

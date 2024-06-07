@@ -1,5 +1,6 @@
 package cupet.com.demo.shop;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,21 +44,27 @@ public class CartController {
     }
 	
 	@GetMapping("/items/count")
-	public ResponseEntity<Map<String, Integer>> getCartCnt(@RequestHeader("Authorization") String jwt, @CookieValue(value = "token", required = false) String token) throws MyCupetBootMainException {
+	public ResponseEntity<Map<Integer, Integer>> getCartCnt(@RequestHeader("Authorization") String jwt, @CookieValue(value = "token", required = false) String token) throws MyCupetBootMainException {
 	    Map<String, Object> m = authService.AuthByUser(jwt);
 	    String cupet_user_id = (String) m.get("cupet_user_id");
-	    
-	    List<CartVO> cart1 = cartService.findByUserId(cupet_user_id); 
-	    List<Integer> cartt = cart1.stream().map(CartVO::getCupet_cart_no).toList();
-	    int cartnum = cartt.get(0).intValue();
-	    
-	    List<CartProdVO> cartdata = cartService.getCartProd(cartnum);
-	    List<Integer> cartdata2 = cartdata.stream().map(CartProdVO::getCupet_cartprodcnt).toList();
-	    int cartcnt = cartdata2.get(0).intValue();
-	    System.out.println(cartcnt);
-	    
-	    Map<String, Integer> response = Map.of("cartcnt", cartcnt);
+
+	    // cart_no 찾기
+	    List<CartVO> cart1 = cartService.findByUserId(cupet_user_id);
+
+	    // cartno를 이용해서 cartproductno랑 연결
+	    List<Integer> cart_no = cart1.stream().map(CartVO::getCupet_cart_no).toList();
+	    List<CartProdVO> cartProdData = cartService.findByCartNo(cart_no);
+
+	    List<Integer> prodno = cartProdData.stream().map(CartProdVO::getCupet_prodno).toList();
+	    List<Integer> cartprodcnt = cartProdData.stream().map(CartProdVO::getCupet_cartprodcnt).toList();
+
+	    // prodno와 cartprodcnt를 키-값 쌍으로 맵에 추가
+	    Map<Integer, Integer> response = new HashMap<>();
+	    for (int i = 0; i < prodno.size(); i++) {
+	        response.put(prodno.get(i), cartprodcnt.get(i));
+	    }
 	    System.out.println(response);
+
 	    return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
@@ -108,4 +115,29 @@ public class CartController {
         
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    
+    @PutMapping("/items/{cupet_prodno}")
+    public ResponseEntity<Void> updateCartItemQuantity(@RequestHeader("Authorization") String jwt, @PathVariable("cupet_prodno") int cupet_prodno,
+            @RequestBody Map<String, Integer> request, @CookieValue(value = "token", required = false) String token) throws MyCupetBootMainException {
+        Map<String, Object> m = authService.AuthByUser(jwt);
+        String cupet_user_id = (String) m.get("cupet_user_id");
+
+        // 1 id로 art_no 찾기
+        List<CartVO> cart = cartService.findByUserId(cupet_user_id);
+        List<Integer> cartnumber = cart.stream().map(CartVO::getCupet_cart_no).toList();
+        int cart_no = cartnumber.get(0).intValue();
+
+        //2. cart_no 랑 prodno 로 cart product 찾기
+        List<CartProdVO> cart2 = cartService.findByCartnoAndProdno(cart_no, cupet_prodno);
+        List<Integer> cart3 = cart2.stream().map(CartProdVO::getCupet_cartproduct_no).toList();
+        int cartprodnum = cart3.get(0).intValue();
+
+        //3. 장바구니 수량 변경
+        int newQuantity = request.get("quantity");
+        cartService.updateQuantity(cartprodnum, newQuantity);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    
 }
