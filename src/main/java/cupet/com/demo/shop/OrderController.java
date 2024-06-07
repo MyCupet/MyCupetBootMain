@@ -53,6 +53,7 @@ public class OrderController {
         System.out.println(newOrder);
         
         //orderproduct테이블에 추가하기
+        
        //아이템 수량 줄이기
         
         
