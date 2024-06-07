@@ -16,15 +16,15 @@ import lombok.extern.slf4j.Slf4j;
 public class CartService {
 	private final CartMapper cartMapper;
 	
-	//전체 불러오기
-	public PageResponseVO<CartVO> getList(PageRequestVO pageRequestVO) {
-    	List<CartVO> list = cartMapper.getCartList(pageRequestVO);
-    	int total = cartMapper.getCartTotalCount(pageRequestVO);
-
-    	return new PageResponseVO<CartVO>(list ,total, pageRequestVO.getSize(), pageRequestVO.getPageNo());
-    	}
+	public List<CartProdVO> getCartProd(int cartnum) {
+		return cartMapper.getCartProd(cartnum);
+	}
 	 
 	public List<CartVO> findByUserId(String cupet_user_id) {
+		return cartMapper.findByUserId(cupet_user_id);
+	}
+	
+	public List<CartVO> findByUserIdAndProd(String cupet_user_id) {
 		return cartMapper.findByUserId(cupet_user_id);
 	}
 	
@@ -66,4 +66,9 @@ public class CartService {
 	public List<CartProdVO>findByCartnoAndProdno(int cart_no, int cupet_prodno) {
 		return cartMapper.findByCartnoAndProdno(cart_no, cupet_prodno);
 	}
+	
+	public int updateQuantity(int cartprodnum, int newQuantity) {
+	    return cartMapper.updateQuantity(cartprodnum, newQuantity);
+	}
+
 }
