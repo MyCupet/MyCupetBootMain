@@ -43,4 +43,27 @@ public interface FindPetMapper {
 	List<MissingPetVO> getMarkerList();
 
 
+
+	@Select("SELECT cp.*, cm.*, cu.cupet_user_name, cu.cupet_user_nickname " +
+	        "FROM cupetpet cp " +
+	        "INNER JOIN cupetpet_missing cm ON cp.cupet_pet_no = cm.cupet_pet_no " +
+	        "INNER JOIN cupetuser cu ON cp.cupet_user_id = cu.cupet_user_id " +
+	        "WHERE cp.cupet_pet_no = #{petno}")
+
+	Map<String, Object> getPetDetailInfo(String petno);
+
+
+
+
+	@Insert("insert into cupetpet_missing_comment (cupet_pet_no, comment , cupet_user_id,cupet_user_nickname) values ("
+			+ "#{cupet_pet_no},#{comment},#{cupet_user_id},#{cupet_user_nickname})")
+	int addComment(MissingPetCommentVO mpc);
+
+
+
+	@Select("select * from cupetpet_missing_comment where cupet_pet_no = #{cupet_pet_no}")
+	List<MissingPetCommentVO> getMisssingPetComments(String petNo);
+
+
+
 }

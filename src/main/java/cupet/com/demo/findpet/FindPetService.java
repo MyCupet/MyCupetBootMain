@@ -68,4 +68,22 @@ public class FindPetService {
 		System.out.println("missing pet list : "+list);
 		return list; 
 	}
+
+	public Map<String, Object> getPetDetailInfo(String petno) {
+		Map<String, Object> res = findPetMapper.getPetDetailInfo(petno);
+		System.out.println(res);
+		return res;
+	}
+
+	public int addComment(String id, String nickname, String content, String petNo) {
+		// TODO Auto-generated method stub
+		MissingPetCommentVO mpc = MissingPetCommentVO.builder().comment(content).cupet_pet_no(petNo).cupet_user_id(id).cupet_user_nickname(nickname).build();
+		return findPetMapper.addComment(mpc);
+	}
+
+	public List<MissingPetCommentVO> getMisssingPetComments(String petNo) {
+		List<MissingPetCommentVO> list = findPetMapper.getMisssingPetComments(petNo);
+		System.out.println(list);
+		return list;
+	}
 }

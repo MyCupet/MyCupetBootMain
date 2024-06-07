@@ -83,6 +83,13 @@ public class FindPetController implements MyCupetDbInterface {
 	    return response;
 	}
 	
+	@PostMapping("/getPetDetailInfo")
+	public Map<String, Object> getPetDetailInfo(
+	    @RequestBody Map<String,String> obj) {
+		Map<String,Object> response  = findPetService.getPetDetailInfo(obj.get("petNo"));
+	    return response;
+	}
+	
 	
 	
 	@PostMapping("/misiinPetInsert")
@@ -119,9 +126,30 @@ public class FindPetController implements MyCupetDbInterface {
 			res.put("result", "failed");
 			return res;
 		}
-		
+	
+
 	}
 	
+	@PostMapping("/addComment")
+	public String addComment(@RequestBody Map<String,String> body,@RequestHeader ("Authorization") String token) throws MyCupetBootMainException {
+		String content = body.get("content");
+		String petNo = body.get("cupetPetNo");
+		Map<String, Object> temp = authService.AuthByUser(token);
+		String id = (String) temp.get("cupet_user_id");
+		String nickname = (String) temp.get("cupet_user_nickname");
+		int num = findPetService.addComment(id,nickname,content,petNo);
+		return "";
+	}
 	
+	@PostMapping("/MisssingPetComments")
+	public Map<String , Object> MisssingPetComments(@RequestBody Map<String,String> body){
+		
+		String petNo = body.get("cupetPetNo");
+		System.out.println(petNo +": 댓글리스트 출력");
+		Map<String , Object> res = new HashMap<>();
+		List<MissingPetCommentVO> list = findPetService.getMisssingPetComments(petNo);
+		res.put("list", list);
+		return res;
+	}
 	
 }
