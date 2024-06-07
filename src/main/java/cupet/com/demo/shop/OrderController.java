@@ -22,6 +22,7 @@ public class OrderController {
     private final AuthService authService;
     private final OrderService orderService;
     private final CartService cartService;
+    private final ShopService shopService;
 
     @GetMapping("/api1/order")
     public ResponseEntity getOrder(@RequestHeader("Authorization") String jwt, @CookieValue(value = "token", required = false) String token) throws MyCupetBootMainException {
@@ -54,6 +55,33 @@ public class OrderController {
         
         //orderproduct테이블에 추가하기
         
+        //1. order_no 가져오기 -> 가장 마지막에 추가된 data
+        int order_no = orderService.getOrderNo();
+        		
+        //2. prodno 가져오기
+        List<CartVO> cart1 = cartService.findByUserId(cupet_user_id);
+        List<Integer> cartt = cart1.stream().map(CartVO::getCupet_cart_no).toList();
+        List<CartProdVO> cart2 = cartService.findByCartNo(cartt); 
+        System.out.println("cart2 = " + cart2);
+        List<Integer> prodnoList = cart2.stream().map(CartProdVO::getCupet_prodno).toList();
+        
+        //3. orderprice가져오기
+        List<ShopVO> price1 = shopService.findByProdNo(prodnoList);
+        List<Integer> priceList = price1.stream().map(ShopVO::getCupet_prodprice).toList();
+        
+        //4. oprderprodcnt 가져오기
+        List<Integer> prodcntList = cart2.stream().map(CartProdVO::getCupet_cartprodcnt).toList();
+        
+        // OrderProdVO에 데이터 삽입
+        for (int i = 0; i < cart2.size(); i++) {
+            OrderProdVO orderProdVO = new OrderProdVO();
+            orderProdVO.setCupet_order_no(order_no);
+            orderProdVO.setCupet_prodno(cart2.get(i).getCupet_prodno());
+            orderProdVO.setCupet_orderprice(priceList.get(i));
+            orderProdVO.setCupet_orderprodcnt(prodcntList.get(i));
+            orderService.insertDetail(orderProdVO);
+        }
+        
        //아이템 수량 줄이기
         
         
@@ -62,7 +90,6 @@ public class OrderController {
         List<Integer> cartnumber = cart.stream().map(CartVO::getCupet_cart_no).toList();
         int cartno = cartnumber.get(0).intValue();
         cartService.deleteCartAll(cartno);
-        
         
         //포인트 까기
         UserVO user1 = orderService.findUserById(cupet_user_id);

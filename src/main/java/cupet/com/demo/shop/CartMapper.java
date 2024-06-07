@@ -29,6 +29,9 @@ public interface CartMapper {
 		"<foreach item='item' index='index' collection='cartt' open='(' separator=',' close=')'>","#{item}","</foreach>","</script>"})
 	List<CartProdVO> findByCartNo(@Param("cartt") List<Integer> cartt);
 
+	@Select("select * from cupetcartproduct where cupet_cart_no = #{cartVo}")
+	List<CartProdVO> findByCartNo2(int cartNo);
+
 	@Select("select * from cupetcart where cupet_user_id = #{cupet_user_id}")
 	List<CartProdVO> findById(String cupet_user_id);
 
