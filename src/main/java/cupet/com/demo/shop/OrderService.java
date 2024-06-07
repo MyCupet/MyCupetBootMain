@@ -29,5 +29,13 @@ public class OrderService {
 	public int payPoint(int afterPoint, String cupet_user_id) {
 		 return orderMapper.payPoint(afterPoint, cupet_user_id);
 	}
+	
+	public int getOrderNo() {
+		 return orderMapper.getOrderNo();
+	}
+	
+	public void insertDetail(OrderProdVO orderProdVO) {
+        orderMapper.insertDetail(orderProdVO);
+    }
 
 }

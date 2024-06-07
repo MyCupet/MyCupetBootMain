@@ -24,6 +24,14 @@ public interface OrderMapper {
 	
 	@Update("update cupetuser set cupet_user_point = #{arg0} where cupet_user_id = #{arg1}")
 	int payPoint(int afterPoint, String cupet_user_id);
+	
+	@Select("select cupet_order_no from cupetorder order by cupet_order_no desc LIMIT 1 ")
+	int getOrderNo();
+	
+	@Insert("INSERT INTO cupetorderproduct (cupet_order_no, cupet_prodno, cupet_orderprice, cupet_orderprodcnt) " +
+            "VALUES (#{cupet_order_no}, #{cupet_prodno}, #{cupet_orderprice}, #{cupet_orderprodcnt})")
+	@Options(keyProperty = "cupet_orderprodno")
+    void insertDetail(OrderProdVO orderProdVO);
 
 	
 }

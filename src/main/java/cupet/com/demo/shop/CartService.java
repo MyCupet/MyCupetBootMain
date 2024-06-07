@@ -31,6 +31,11 @@ public class CartService {
 	public List<CartProdVO> findByCartNo(List<Integer> cartt) {
 	    return cartMapper.findByCartNo(cartt);
 	}
+	
+	public List<CartProdVO> findByCartNo2(int cartNo) {
+		return cartMapper.findByCartNo2(cartNo);
+	}
+	
 	//새 cart를 유저에게 할당
 	public int newUserAddtoCart(String cupet_user_id) {
         CartVO newCart = new CartVO();
