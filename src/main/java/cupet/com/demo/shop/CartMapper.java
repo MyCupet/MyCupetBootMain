@@ -23,6 +23,7 @@ public interface CartMapper {
 	@Insert("insert into cupetcart (cupet_user_id) values (#{cupet_user_id})")
     @Options(useGeneratedKeys = true, keyProperty = "cupet_cart_no")
     int newUserAddtoCart(CartVO cart);
+	
 	//cartno를 이용해서 cartproductno랑 연결
 	@Select({"<script>","select * from cupetcartproduct where cupet_cart_no in",
 		"<foreach item='item' index='index' collection='cartt' open='(' separator=',' close=')'>","#{item}","</foreach>","</script>"})
@@ -47,6 +48,9 @@ public interface CartMapper {
 	
 	@Delete("DELETE FROM cupetcartproduct WHERE cupet_cartproduct_no = #{cartprodnum}")
     int delete(int cartprodnum);
+	
+	@Delete("DELETE FROM cupetcartproduct WHERE cupet_cart_no = #{cartno}")
+    int deleteCartAll(int cartno);
 	
 	@Select("select * from cupetcartproduct where cupet_cart_no = #{arg0} and cupet_prodno = #{arg1}")
 	List<CartProdVO> findByCartnoAndProdno(int cart_no, int cupet_prodno);

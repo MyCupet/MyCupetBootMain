@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import cupet.com.demo.user.UserVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,6 +20,14 @@ public class OrderService {
 	
 	public int insert(OrderVO orderVO) {
 		 return orderMapper.insert(orderVO);
+	}
+	
+	public UserVO findUserById(String cupet_user_id){
+		return orderMapper.findUserById(cupet_user_id);
+	}
+	
+	public int payPoint(int afterPoint, String cupet_user_id) {
+		 return orderMapper.payPoint(afterPoint, cupet_user_id);
 	}
 
 }
