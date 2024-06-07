@@ -30,7 +30,7 @@ public class ImageController {
         if (imageDetails.isEmpty()) {
             return CustomResponse.error("image not found");
         }
-        Object imageStream = imageService.getImage(image_type, imageDetails.get(0).getImage_id());
+        Object imageStream = imageService.getImage(image_type, imageDetails.get(0).getReal_filename());
 
         return CustomResponse.ok("Get Image URL", imageStream);
     }
@@ -43,5 +43,18 @@ public class ImageController {
         log.info("Upload an image file");
         String fileUrl = imageService.uploadCloudAndSaveToDb(imageType, file, use_id);
         return CustomResponse.ok("Upload a file", fileUrl);
+    }
+    
+    @GetMapping("/delete/{image_type}")
+    public CustomResponse<String> deleteImage(
+            @PathVariable("image_type") String imageType, 
+            @RequestParam("use_id") String use_id) throws IOException {
+        log.info("Delete an image file");
+        String fileUrl = imageService.deleteImage(imageType, use_id);
+        if (fileUrl != null) {
+            return CustomResponse.ok("Delete a file", fileUrl);
+        } else {
+            return CustomResponse.error("Failed to delete image");
+        }
     }
 }

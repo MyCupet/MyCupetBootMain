@@ -2,6 +2,7 @@ package cupet.com.demo.image;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -16,4 +17,7 @@ public interface ImageMapper {
 
     @Select("SELECT * FROM cupetimage WHERE use_id = #{use_id}")
     List<ImageVO> getImageById(@Param("use_id") String use_id);
+    
+    @Delete("DELETE FROM cupetimage WHERE use_id = #{use_id}")
+    void deleteImage(@Param("use_id") String use_id);
 }
