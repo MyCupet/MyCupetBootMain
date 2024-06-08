@@ -17,21 +17,23 @@ public interface OrderMapper {
 	@Select("select * from cupetuser where cupet_user_id = #{cupet_user_id}")
 	UserVO findUserById(String cupet_user_id);
 	
-	@Insert("INSERT INTO cupetorder (cupet_user_id, cupet_receiver_name, cupet_receiver_add, cupet_receiver_phone, cupet_total_price, cupet_order_date) "
-	        + "VALUES (#{cupet_user_id}, #{cupet_receiver_name}, #{cupet_receiver_add}, #{cupet_receiver_phone}, #{cupet_total_price}, #{cupet_order_date})")
+	@Insert("insert into cupetorder (cupet_user_id, cupet_receiver_name, cupet_receiver_add, cupet_receiver_phone, cupet_total_price, cupet_order_date) "
+	        + "values (#{cupet_user_id}, #{cupet_receiver_name}, #{cupet_receiver_add}, #{cupet_receiver_phone}, #{cupet_total_price}, #{cupet_order_date})")
 	@Options(keyProperty = "cupet_order_no")
 	int insert(OrderVO orderVO);
 	
 	@Update("update cupetuser set cupet_user_point = #{arg0} where cupet_user_id = #{arg1}")
 	int payPoint(int afterPoint, String cupet_user_id);
 	
+	//가장 마지막에 추가된 order no가져오기
 	@Select("select cupet_order_no from cupetorder order by cupet_order_no desc LIMIT 1 ")
 	int getOrderNo();
 	
-	@Insert("INSERT INTO cupetorderproduct (cupet_order_no, cupet_prodno, cupet_orderprice, cupet_orderprodcnt) " +
-            "VALUES (#{cupet_order_no}, #{cupet_prodno}, #{cupet_orderprice}, #{cupet_orderprodcnt})")
+	@Insert("insert into cupetorderproduct (cupet_order_no, cupet_prodno, cupet_orderprice, cupet_orderprodcnt) " +
+            "values (#{cupet_order_no}, #{cupet_prodno}, #{cupet_orderprice}, #{cupet_orderprodcnt})")
 	@Options(keyProperty = "cupet_orderprodno")
     void insertDetail(OrderProdVO orderProdVO);
 
-	
+	@Select("select * from cupetorder where cupet_order_no = #{orderNo} and cupet_user_id = #{userId}")
+    OrderVO selectOrderDetailByOrderNo(@Param("orderNo") int orderNo, @Param("userId") String userId);
 }
