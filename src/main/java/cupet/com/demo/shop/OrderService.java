@@ -37,5 +37,9 @@ public class OrderService {
 	public void insertDetail(OrderProdVO orderProdVO) {
         orderMapper.insertDetail(orderProdVO);
     }
+	
+	public OrderVO findOrderDetailByOrderNo(int orderNo, String userId) {
+        return orderMapper.selectOrderDetailByOrderNo(orderNo, userId);
+    }
 
 }
