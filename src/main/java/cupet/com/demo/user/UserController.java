@@ -73,6 +73,7 @@ public class UserController {
         try {
             // 펫 정보 삽입 서비스 호출
             PetVO insertedPet = petService.petInsert(petVO);
+            result.put("cupet_pet_no", insertedPet.getCupet_pet_no());
             result.put("pet", insertedPet);
             result.put("status", true);
         } catch (Exception e) {
@@ -108,6 +109,7 @@ public class UserController {
 	    Map<String, Object> result = new HashMap<>();
 	    try {
 	        int petDelete = petService.petDelete(cupet_pet_no);
+            result.put("cupet_pet_no", petDelete);
 	        result.put("petDelete", petDelete);
 	        result.put("status", true);
 	    } catch (Exception e) {
