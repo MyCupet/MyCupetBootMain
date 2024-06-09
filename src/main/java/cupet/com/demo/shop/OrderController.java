@@ -102,9 +102,7 @@ public class OrderController {
     }
     
     @GetMapping("/api1/order/{cupet_order_no}")
-    public ResponseEntity<OrderVO> OrderDetailView (
-            @RequestHeader("Authorization") String jwt, 
-            @PathVariable("cupet_order_no") int cupet_order_no,
+    public ResponseEntity<OrderVO> OrderDetailView (@RequestHeader("Authorization") String jwt,  @PathVariable("cupet_order_no") int cupet_order_no,
             @CookieValue(value = "token", required = false) String token) throws MyCupetBootMainException {
 
         Map<String, Object> m = authService.AuthByUser(jwt);
@@ -114,5 +112,20 @@ public class OrderController {
 
         return new ResponseEntity<>(orderDetail, HttpStatus.OK);
     }
+    
+    @PostMapping("/api1/order/items")
+    public ResponseEntity<List<ShopVO>> getOrderItems(@RequestHeader("Authorization") String jwt, @RequestParam("cupet_order_no") int cupet_order_no, 
+        @CookieValue(value = "token", required = false) String token) throws MyCupetBootMainException {
+        Map<String, Object> m = authService.AuthByUser(jwt);
+        String cupet_user_id = (String) m.get("cupet_user_id");
+
+        List<Integer> productNos = orderService.findProductNosByOrderNo(cupet_order_no);
+        System.out.println("productNos = " + productNos);
+
+        List<ShopVO> products = shopService.findByProdNo(productNos);
+
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
 
 }

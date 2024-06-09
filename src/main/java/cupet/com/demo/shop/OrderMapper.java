@@ -34,6 +34,9 @@ public interface OrderMapper {
 	@Options(keyProperty = "cupet_orderprodno")
     void insertDetail(OrderProdVO orderProdVO);
 
-	@Select("select * from cupetorder where cupet_order_no = #{orderNo} and cupet_user_id = #{userId}")
-    OrderVO selectOrderDetailByOrderNo(@Param("orderNo") int orderNo, @Param("userId") String userId);
+	@Select("select * from cupetorder where cupet_order_no = #{cupet_order_no} and cupet_user_id = #{cupet_user_id}")
+    OrderVO selectOrderDetailByOrderNo(@Param("cupet_order_no") int cupet_order_no, @Param("cupet_user_id") String cupet_user_id);
+	
+	@Select("select cupet_prodno FROM cupetorderproduct where cupet_order_no = #{cupet_order_no}")
+    List<Integer> findProductNosByOrderNo(int cupet_order_no);
 }
