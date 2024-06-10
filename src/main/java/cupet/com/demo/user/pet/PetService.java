@@ -13,7 +13,8 @@ public class PetService {
 
     public List<PetVO> petView(String cupet_user_id) {
         try {
-            return petMapper.getAllPets(cupet_user_id);
+        	List<PetVO> petList = petMapper.getAllPets(cupet_user_id);
+            return petList;
         } catch (Exception e) {
             System.err.println("Error fetching pet view: " + e.getMessage());
             e.printStackTrace();

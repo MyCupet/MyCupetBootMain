@@ -49,7 +49,7 @@ public class ImageController {
     public CustomResponse<String> deleteImage(
             @PathVariable("image_type") String imageType, 
             @RequestParam("use_id") String use_id) throws IOException {
-        log.info("Delete an image file");
+        log.info("Delete an " + imageType + " image file");
         String fileUrl = imageService.deleteImage(imageType, use_id);
         if (fileUrl != null) {
             return CustomResponse.ok("Delete a file", fileUrl);

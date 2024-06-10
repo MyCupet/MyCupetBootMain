@@ -15,7 +15,6 @@ public class ImageVO {
     private String image_id;
     private String image_type;
     private String use_id;
-    private String original_name; // 파일이름
     private String real_filename; // 파일명
     private String content_type;
     private String size;

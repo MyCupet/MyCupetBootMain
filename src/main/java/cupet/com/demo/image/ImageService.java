@@ -48,7 +48,6 @@ public class ImageService {
                 .image_type(image_type)
                 .use_id(use_id)
                 .real_filename(realFileName)
-                .original_name(file.getOriginalFilename())
                 .content_type(file.getContentType())
                 .size(String.valueOf(file.getSize()))
                 .created_at(new Date())
