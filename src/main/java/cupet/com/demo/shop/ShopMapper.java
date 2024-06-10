@@ -28,5 +28,4 @@ public interface ShopMapper {
 	List<ShopVO> findByNo(int[] prodnos);
 	
 	
-	
 }
