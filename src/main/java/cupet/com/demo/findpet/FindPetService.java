@@ -66,6 +66,21 @@ public class FindPetService {
 		
 		List<MissingPetVO> list = findPetMapper.getMarkerList();
 		System.out.println("missing pet list : "+list);
+		System.out.println(lat);
+		System.out.println(lng);
+		Comparator<MissingPetVO> cp = new Comparator<MissingPetVO>() {	
+			@Override
+			public int compare(MissingPetVO o1, MissingPetVO o2) {
+				return Double.compare(o1.nodeDistance(lat,lng), o2.nodeDistance(lat,lng));
+			}
+		};
+		
+		Collections.sort(list,cp);
+		
+		if(list.size() > 10) {
+			list.subList(0, 10);
+		}
+		
 		return list; 
 	}
 
@@ -73,5 +88,17 @@ public class FindPetService {
 		Map<String, Object> res = findPetMapper.getPetDetailInfo(petno);
 		System.out.println(res);
 		return res;
+	}
+
+	public int addComment(String id, String nickname, String content, String petNo) {
+		// TODO Auto-generated method stub
+		MissingPetCommentVO mpc = MissingPetCommentVO.builder().comment(content).cupet_pet_no(petNo).cupet_user_id(id).cupet_user_nickname(nickname).build();
+		return findPetMapper.addComment(mpc);
+	}
+
+	public List<MissingPetCommentVO> getMisssingPetComments(String petNo) {
+		List<MissingPetCommentVO> list = findPetMapper.getMisssingPetComments(petNo);
+		System.out.println(list);
+		return list;
 	}
 }

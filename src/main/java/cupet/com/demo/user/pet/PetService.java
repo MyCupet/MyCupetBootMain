@@ -13,7 +13,8 @@ public class PetService {
 
     public List<PetVO> petView(String cupet_user_id) {
         try {
-            return petMapper.getAllPets(cupet_user_id);
+        	List<PetVO> petList = petMapper.getAllPets(cupet_user_id);
+            return petList;
         } catch (Exception e) {
             System.err.println("Error fetching pet view: " + e.getMessage());
             e.printStackTrace();
@@ -24,6 +25,11 @@ public class PetService {
     public PetVO petInsert(PetVO petVO) {
         try {
             petMapper.insertPet(petVO);
+            List<PetVO> petList = petView(petVO.getCupet_user_id());
+            if (!petList.isEmpty()) {
+                petVO.setCupet_pet_no(petList.get(petList.size() - 1).getCupet_pet_no());
+            }
+            System.out.println("펫정보"+petVO);
             return petVO;
         } catch (Exception e) {
             System.err.println("Error inserting pet: " + e.getMessage());

@@ -69,19 +69,27 @@ public class FindPetController implements MyCupetDbInterface {
 	}
 	
 	@PostMapping("/getMarkerList")
-	public Map<String, Object> missingPetinfoList(
-	    @RequestBody Map<String,Object> obj) {
-		System.out.println(obj);
-		String lat = (String)obj.get("lat");
-		String lng = (String)obj.get("lng");
-		Map<String,Object> response = new HashMap<>();
-		List<MissingPetVO> list = findPetService.getMarkerList(lat,lng);
+	public Map<String, Object> missingPetinfoList(@RequestBody Map<String,Object> obj) {
+	    System.out.println(obj);
+	    
+	    @SuppressWarnings("unchecked")
+		Map<String, Object> params = (Map<String, Object>) obj.get("params");
+	    
+	    String lat = String.valueOf(params.get("lat"));
+	    String lng = String.valueOf(params.get("lng"));
+	    
+	    System.out.println(lat);
+	    System.out.println(lng);
+	    
+	    Map<String, Object> response = new HashMap<>();
+	    List<MissingPetVO> list = findPetService.getMarkerList(lat, lng);
 
-		response.put("markerList",list);
-		
-		System.out.println(response);
+	    response.put("markerList", list);
+	    
+	    System.out.println(response);
 	    return response;
 	}
+
 	
 	@PostMapping("/getPetDetailInfo")
 	public Map<String, Object> getPetDetailInfo(
@@ -126,9 +134,30 @@ public class FindPetController implements MyCupetDbInterface {
 			res.put("result", "failed");
 			return res;
 		}
-		
+	
+
 	}
 	
+	@PostMapping("/addComment")
+	public String addComment(@RequestBody Map<String,String> body,@RequestHeader ("Authorization") String token) throws MyCupetBootMainException {
+		String content = body.get("content");
+		String petNo = body.get("cupetPetNo");
+		Map<String, Object> temp = authService.AuthByUser(token);
+		String id = (String) temp.get("cupet_user_id");
+		String nickname = (String) temp.get("cupet_user_nickname");
+		int num = findPetService.addComment(id,nickname,content,petNo);
+		return "";
+	}
 	
+	@PostMapping("/MisssingPetComments")
+	public Map<String , Object> MisssingPetComments(@RequestBody Map<String,String> body){
+		
+		String petNo = body.get("cupetPetNo");
+		System.out.println(petNo +": 댓글리스트 출력");
+		Map<String , Object> res = new HashMap<>();
+		List<MissingPetCommentVO> list = findPetService.getMisssingPetComments(petNo);
+		res.put("list", list);
+		return res;
+	}
 	
 }
