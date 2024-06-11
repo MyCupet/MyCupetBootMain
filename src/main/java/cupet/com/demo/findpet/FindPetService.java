@@ -66,6 +66,21 @@ public class FindPetService {
 		
 		List<MissingPetVO> list = findPetMapper.getMarkerList();
 		System.out.println("missing pet list : "+list);
+		System.out.println(lat);
+		System.out.println(lng);
+		Comparator<MissingPetVO> cp = new Comparator<MissingPetVO>() {	
+			@Override
+			public int compare(MissingPetVO o1, MissingPetVO o2) {
+				return Double.compare(o1.nodeDistance(lat,lng), o2.nodeDistance(lat,lng));
+			}
+		};
+		
+		Collections.sort(list,cp);
+		
+		if(list.size() > 10) {
+			list.subList(0, 10);
+		}
+		
 		return list; 
 	}
 
