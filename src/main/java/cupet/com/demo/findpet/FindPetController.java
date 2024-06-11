@@ -69,19 +69,27 @@ public class FindPetController implements MyCupetDbInterface {
 	}
 	
 	@PostMapping("/getMarkerList")
-	public Map<String, Object> missingPetinfoList(
-	    @RequestBody Map<String,Object> obj) {
-		System.out.println(obj);
-		String lat = (String)obj.get("lat");
-		String lng = (String)obj.get("lng");
-		Map<String,Object> response = new HashMap<>();
-		List<MissingPetVO> list = findPetService.getMarkerList(lat,lng);
+	public Map<String, Object> missingPetinfoList(@RequestBody Map<String,Object> obj) {
+	    System.out.println(obj);
+	    
+	    @SuppressWarnings("unchecked")
+		Map<String, Object> params = (Map<String, Object>) obj.get("params");
+	    
+	    String lat = String.valueOf(params.get("lat"));
+	    String lng = String.valueOf(params.get("lng"));
+	    
+	    System.out.println(lat);
+	    System.out.println(lng);
+	    
+	    Map<String, Object> response = new HashMap<>();
+	    List<MissingPetVO> list = findPetService.getMarkerList(lat, lng);
 
-		response.put("markerList",list);
-		
-		System.out.println(response);
+	    response.put("markerList", list);
+	    
+	    System.out.println(response);
 	    return response;
 	}
+
 	
 	@PostMapping("/getPetDetailInfo")
 	public Map<String, Object> getPetDetailInfo(
