@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cupet.com.demo.MyCupetBootMainException;
 import cupet.com.demo.auth.AuthService;
+import cupet.com.demo.board.selectoption.SelectoptionSearchVO;
 import cupet.com.demo.board.selectoption.SelectoptionService;
 import cupet.com.demo.board.selectoption.SelectoptionVO;
 import lombok.RequiredArgsConstructor;
@@ -29,9 +30,9 @@ public class BoardController {
 	private final AuthService authService;
 
   
-    @GetMapping("/selectoptionList")
+    @GetMapping("/selectOptionList")
     @ResponseBody
-    public Map<String, Object> selectoptionList(Model model) throws MyCupetBootMainException {
+    public Map<String, Object> selectoptionList() throws MyCupetBootMainException {
         System.out.println("셀렉트 옵션 리스트 추출");
       
         Map<String, Object> result = new HashMap<>();
@@ -48,22 +49,67 @@ public class BoardController {
         return result;
     }
     
-    @GetMapping("/boardList")
+    @GetMapping("/selectedOptionSearch")
     @ResponseBody
-    public Map<String, Object> boardList(Model model) {
-        System.out.println("보드 리스트 추출");
+    public Map<String, Object> selectoptionSearch() throws MyCupetBootMainException {
+        System.out.println("셀렉트 옵션 서치 추출");
+      
         Map<String, Object> result = new HashMap<>();
         try {
-            List<BoardVO> options = boardService.boardList();
-            result.put("list", options);
+            List<SelectoptionSearchVO> selectedOptionSearch = selectoptionService.selectoptionSearch();
+            result.put("list", selectedOptionSearch);
             result.put("status", true);
+            System.out.println("selectedOptionSearch : " + result);
         } catch (Exception e) {
+            // 예외가 발생한 경우에는 에러 메시지와 상태를 전달합니다.
             result.put("error", e.getMessage());
             result.put("status", false);
             e.printStackTrace();
         }
         return result;
     }
+    
+    @PostMapping("/boardList")
+    @ResponseBody
+    public Map<String, Object> boardList(@RequestBody Map<String, Object> searchOpations) {
+        System.out.println("보드 리스트 추출");
+        Map<String, Object> result = new HashMap<>();
+        
+        Map<String, Object> params = (Map<String, Object>) searchOpations.get("params");
+        System.out.println("params" + params);
+
+        try {
+        		
+                Map<String, Object> SearchOptions = new HashMap<>();
+                int cupet_board_head_no = (int)params.get("selectedOptionList");
+                int searchScopeOptions = (int)params.get("selectedOptionSearch");
+                String searchKeyword = (String)params.get("searchKeyword");
+
+                SearchOptions.put("cupet_board_head_no", cupet_board_head_no);
+                SearchOptions.put("searchScopeOptions", searchScopeOptions);
+                SearchOptions.put("searchKeyword", searchKeyword);
+
+                System.out.println("검색 조건 - 머릿말번호 : " + cupet_board_head_no);
+                System.out.println("검색 조건 - 검색 범위번호 : " + searchScopeOptions);
+                System.out.println("검색 조건 - 검색어 : " + searchKeyword);
+                
+                List<BoardVO> list = boardService.boardList(SearchOptions);
+
+                
+                result.put("list", list);
+                result.put("status", true);
+                System.out.println("result : " + result);
+                return result;                
+            
+        } catch (Exception e) {
+            result.put("error", e.getMessage());
+            result.put("status", false);
+            e.printStackTrace();
+        }
+        return result;
+
+    }
+    
 
     @GetMapping("/boardView")
     @ResponseBody

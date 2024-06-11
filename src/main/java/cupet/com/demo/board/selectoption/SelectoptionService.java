@@ -22,4 +22,15 @@ public class SelectoptionService {
          throw e;
      }
  }
+ 
+ public List<SelectoptionSearchVO> selectoptionSearch() {
+     try {
+         return selectoptionMapper.getSelectoptionSearch();
+     } catch (Exception e) {
+         // 예외를 로깅하고 다시 던집니다.
+         System.err.println("Error fetching select search options: " + e.getMessage());
+         e.printStackTrace();
+         throw e;
+     }
+ }
 }

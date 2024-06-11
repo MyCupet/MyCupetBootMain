@@ -11,5 +11,8 @@ public interface SelectoptionMapper {
 
 	@Select("select * from cupetboard_head")
 	List<SelectoptionVO> getSelectoptionlist();
+	
+	@Select("select * from cupetboard_search")
+	List<SelectoptionSearchVO> getSelectoptionSearch();
 
 }
