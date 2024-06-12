@@ -8,5 +8,5 @@ public class OrderDto {
     private String address;
     private String phone;
     private int price;
-    private String date; // date 필드를 추가
+    private String date; 
 }
