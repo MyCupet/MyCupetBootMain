@@ -2,6 +2,8 @@ package cupet.com.demo.pay;
 
 import org.apache.ibatis.annotations.*;
 
+import cupet.com.demo.shop.OrderVO;
+
 import java.util.List;
 
 @Mapper
@@ -15,4 +17,7 @@ public interface PayMapper {
     
     @Update("update cupetuser set cupet_user_point = #{arg0} where cupet_user_id = #{arg1}")
 	int chargePoint(int afterPoint, String cupet_user_id);
+    
+    @Select("select * from cupetpay where cupet_user_id = #{cupet_user_id}")
+    List<PayVO> findPaymentsByUserId(String cupet_user_id);
 }

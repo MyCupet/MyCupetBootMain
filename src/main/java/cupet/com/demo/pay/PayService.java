@@ -22,4 +22,8 @@ public class PayService {
 		 return payMapper.chargePoint(afterPoint, cupet_user_id);
 	}
     
+    public List<PayVO> findPaymentsByUserId(String cupet_user_id) {
+        return payMapper.findPaymentsByUserId(cupet_user_id);
+    }
+    
 }  

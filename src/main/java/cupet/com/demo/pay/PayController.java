@@ -1,8 +1,5 @@
 package cupet.com.demo.pay;
 
-import com.siot.IamportRestClient.response.IamportResponse;
-import com.siot.IamportRestClient.response.Payment;
-
 import cupet.com.demo.MyCupetBootMainException;
 import cupet.com.demo.auth.AuthService;
 import cupet.com.demo.shop.OrderService;
@@ -10,6 +7,7 @@ import cupet.com.demo.user.UserVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -51,11 +49,12 @@ public class PayController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/{cupet_payno}")
-    public CustomResponse<PayVO> getPayment(@PathVariable int cupet_payno) {
-        PayVO payVO = (PayVO) payService.findPayById(cupet_payno);
-        return CustomResponse.ok("결제 정보를 성공적으로 조회했습니다.", payVO);
+    @GetMapping
+    public ResponseEntity<List<PayVO>> getPayments(@RequestHeader("Authorization") String jwt) throws MyCupetBootMainException {
+        Map<String, Object> m = authService.AuthByUser(jwt);
+        String cupet_user_id = (String) m.get("cupet_user_id");
+        List<PayVO> payments = payService.findPaymentsByUserId(cupet_user_id);
+        return new ResponseEntity<>(payments, HttpStatus.OK);
     }
-
 
 }
