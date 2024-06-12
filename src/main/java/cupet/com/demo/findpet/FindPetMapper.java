@@ -58,7 +58,8 @@ public interface FindPetMapper {
 			+ "#{cupet_pet_no},#{comment},#{cupet_user_id},#{cupet_user_nickname})")
 	int addComment(MissingPetCommentVO mpc);
 
-
+	@Select("select * from cupetpet_missing_comment where comment = #{comment}")
+	MissingPetCommentVO getMisssingPetCommentDetail(String comment);
 
 	@Select("select * from cupetpet_missing_comment where cupet_pet_no = #{cupet_pet_no}")
 	List<MissingPetCommentVO> getMisssingPetComments(String petNo);

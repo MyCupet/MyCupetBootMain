@@ -145,8 +145,8 @@ public class FindPetController implements MyCupetDbInterface {
 		Map<String, Object> temp = authService.AuthByUser(token);
 		String id = (String) temp.get("cupet_user_id");
 		String nickname = (String) temp.get("cupet_user_nickname");
-		int num = findPetService.addComment(id,nickname,content,petNo);
-		return "";
+		String num = findPetService.addComment(id,nickname,content,petNo);
+		return num;
 	}
 	
 	@PostMapping("/MisssingPetComments")

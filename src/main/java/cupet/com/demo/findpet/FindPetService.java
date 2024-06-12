@@ -109,11 +109,22 @@ public class FindPetService {
 		return res;
 	}
 
-	public int addComment(String id, String nickname, String content, String petNo) {
+	public String addComment(String id, String nickname, String content, String petNo) {
 		// TODO Auto-generated method stub
 		MissingPetCommentVO mpc = MissingPetCommentVO.builder().comment(content).cupet_pet_no(petNo).cupet_user_id(id)
 				.cupet_user_nickname(nickname).build();
-		return findPetMapper.addComment(mpc);
+	
+		int num = findPetMapper.addComment(mpc);
+		
+		if( num != 0 ) {
+			MissingPetCommentVO temp =  findPetMapper.getMisssingPetCommentDetail(content);
+			String comment_num = temp.getComment_no();
+			return comment_num;
+		}
+		
+		return "failed";
+		
+		
 	}
 
 	public List<MissingPetCommentVO> getMisssingPetComments(String petNo) {
