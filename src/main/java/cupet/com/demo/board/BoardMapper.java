@@ -46,7 +46,7 @@ public interface BoardMapper {
     // 머릿말 전체, 검색어 있음 - 작성자
     @Select("SELECT B.*, he.* " +
             "FROM (SELECT b.*, u.cupet_user_name, u.cupet_user_nickname " +
-            "      FROM cupetboard b " +
+            "      FROM cuvv dpetboard b " +
             "      JOIN cupetuser u ON b.cupet_user_id = u.cupet_user_id " +
             "      WHERE strip_html_tags(u.cupet_user_nickname) LIKE CONCAT('%', #{searchKeyword}, '%')) AS B " +
             "JOIN cupetboard_head he ON B.cupet_board_head_no = he.cupet_board_head_no " +
