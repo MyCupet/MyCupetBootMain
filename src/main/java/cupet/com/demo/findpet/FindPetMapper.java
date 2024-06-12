@@ -49,7 +49,6 @@ public interface FindPetMapper {
 	        "INNER JOIN cupetpet_missing cm ON cp.cupet_pet_no = cm.cupet_pet_no " +
 	        "INNER JOIN cupetuser cu ON cp.cupet_user_id = cu.cupet_user_id " +
 	        "WHERE cp.cupet_pet_no = #{petno}")
-
 	Map<String, Object> getPetDetailInfo(String petno);
 
 

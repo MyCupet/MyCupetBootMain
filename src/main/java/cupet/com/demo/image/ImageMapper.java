@@ -12,12 +12,15 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository("imageMapper")
 public interface ImageMapper {
-    @Insert("INSERT INTO cupetimage(image_type, use_id, real_filename, content_type, size, created_at) VALUES(#{image_type}, #{use_id}, #{real_filename}, #{content_type}, #{size}, #{created_at})")
-    void insertImage(ImageVO imageVO);
+	@Insert("INSERT INTO cupetimage(image_type, use_id, real_filename, content_type, size, created_at) VALUES(#{image_type}, #{use_id}, #{real_filename}, #{content_type}, #{size}, #{created_at})")
+	void insertImage(ImageVO imageVO);
 
-    @Select("SELECT * FROM cupetimage WHERE use_id = #{use_id}")
-    List<ImageVO> getImageById(@Param("use_id") String use_id);
-    
-    @Delete("DELETE FROM cupetimage WHERE use_id = #{use_id}")
-    void deleteImage(@Param("use_id") String use_id);
+	@Select("SELECT * FROM cupetimage WHERE use_id = #{use_id}")
+	List<ImageVO> getImageById(@Param("use_id") String use_id);
+
+	@Select("SELECT * FROM cupetimage WHERE use_id = #{use_id}")
+	ImageVO getImageByIDtoDetail(String use_id);
+
+	@Delete("DELETE FROM cupetimage WHERE use_id = #{use_id}")
+	void deleteImage(@Param("use_id") String use_id);
 }
