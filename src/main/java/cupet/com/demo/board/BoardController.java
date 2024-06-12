@@ -83,7 +83,7 @@ public class BoardController {
                 Map<String, Object> SearchOptions = new HashMap<>();
                 int cupet_board_head_no = (int)params.get("selectedOptionList");
                 int searchScopeOptions = (int)params.get("selectedOptionSearch");
-                String searchKeyword = (String)params.get("searchKeyword");
+                String searchKeyword = (String)params.get("searchQuery");
 
                 SearchOptions.put("cupet_board_head_no", cupet_board_head_no);
                 SearchOptions.put("searchScopeOptions", searchScopeOptions);

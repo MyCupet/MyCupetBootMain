@@ -22,34 +22,42 @@ public class BoardService {
         	String searchKeyword = (String)searchOpations.get("searchKeyword");
         	
         	//머릿말 전체, 검색어 없음
-        	if (cupet_board_head_no == 4 && searchKeyword == null || searchKeyword.length() == 0 ) {
+        	if (cupet_board_head_no == 4 && (searchKeyword == null || searchKeyword.length() == 0) ) {
+        	System.out.println("Board Searvice - 머릿말 전체, 검색어 없음");
         	return boardMapper.getAllBoardList();
         	
         	//머릿말 전체, 검색어 있음-  제목+내용
         	} else if (cupet_board_head_no == 4 && searchScopeOptions == 10 && searchKeyword != null && searchKeyword.length() != 0) { 
+            	System.out.println("Board Searvice - 머릿말 전체, 검색어 있음-  제목+내용");
             	return boardMapper.SearchBoardList(searchKeyword);
             	
             //머릿말 전체, 검색어 있음- 제목
         	} else if (cupet_board_head_no == 4 && searchScopeOptions == 20 && searchKeyword != null && searchKeyword.length() != 0) { 
+        		System.out.println("Board Searvice - 머릿말 전체, 검색어 있음- 제목");
             	return boardMapper.SearchTitleBoardList(searchKeyword);
             //머릿말 전체, 검색어 있음- 작성자
         	} else if (cupet_board_head_no == 4 && searchScopeOptions == 30 && searchKeyword != null && searchKeyword.length() != 0) { 
+        		System.out.println("Board Searvice - 머릿말 전체, 검색어 있음- 작성자");
             	return boardMapper.SearchWriterBoardList(searchKeyword);
             	
             	//머릿말 검색, 검색어 없음
-        	} else if (searchKeyword == null || searchKeyword.length() == 0) { 
-            	return boardMapper.HeadSelectBoardlist(cupet_board_head_no);
+        	} else if (cupet_board_head_no !=4 && (searchKeyword == null || searchKeyword.length() == 0)) { 
+        		System.out.println("Board Searvice - 머릿말 검색, 검색어 없음");
+            	return boardMapper.HeadSelectBoardList(cupet_board_head_no);
             	
             	//머릿말 검색, 검색어 있음-  제목+내용
         	} else if (searchScopeOptions == 10 && searchKeyword != null && searchKeyword.length() != 0) { 
+        		System.out.println("Board Searvice - 머릿말 검색, 검색어 있음-  제목+내용");
             	return boardMapper.SearchHeadBoardList(cupet_board_head_no, searchKeyword);
             	
             	//머릿말 검색, 검색어 있음- 제목
         	} else if (searchScopeOptions == 20 && searchKeyword != null && searchKeyword.length() != 0) { 
+        		System.out.println("Board Searvice - 머릿말 검색, 검색어 있음- 제목");
             	return boardMapper.SearchHeadTitleBoardList(cupet_board_head_no, searchKeyword);
             	
             	//머릿말 검색, 검색어 있음- 작성자
         	} else if (searchScopeOptions == 30 && searchKeyword != null && searchKeyword.length() != 0) { 
+        		System.out.println("Board Searvice - 머릿말 검색, 검색어 있음- 작성자");
             	return boardMapper.SearchHeadTitleBoardList(cupet_board_head_no, searchKeyword);
         	}	
 	
