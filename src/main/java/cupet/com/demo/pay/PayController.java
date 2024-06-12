@@ -35,6 +35,7 @@ public class PayController {
         newPay.setCupet_user_id(cupet_user_id);
         newPay.setCupet_pay_price(dto.getCupet_pay_price());
         newPay.setCupet_payment_uid(dto.getCupet_payment_uid());
+        newPay.setCupet_pay_date(dto.getCupet_pay_date());
         
         payService.insert(newPay);
         System.out.println(newPay);

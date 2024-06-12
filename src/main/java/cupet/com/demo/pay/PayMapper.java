@@ -2,13 +2,11 @@ package cupet.com.demo.pay;
 
 import org.apache.ibatis.annotations.*;
 
-import cupet.com.demo.shop.OrderVO;
-
 import java.util.List;
 
 @Mapper
 public interface PayMapper {
-    @Insert("insert into cupetpay (cupet_user_id, cupet_pay_price, cupet_payment_uid) VALUES (#{cupet_user_id}, #{cupet_pay_price}, #{cupet_payment_uid})")
+    @Insert("insert into cupetpay (cupet_user_id, cupet_pay_price, cupet_payment_uid, cupet_pay_date) VALUES (#{cupet_user_id}, #{cupet_pay_price}, #{cupet_payment_uid}, #{cupet_pay_date})")
     @Options(useGeneratedKeys = true, keyProperty = "cupet_payno")
     int insert(PayVO payVO);
 
