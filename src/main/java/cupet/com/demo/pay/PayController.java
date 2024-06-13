@@ -28,8 +28,6 @@ public class PayController {
     public ResponseEntity createPayment(@RequestHeader("Authorization") String jwt, @RequestBody PayDto dto) throws MyCupetBootMainException {
     	Map<String, Object> m = authService.AuthByUser(jwt);
         String cupet_user_id = (String) m.get("cupet_user_id");
-        System.out.println(cupet_user_id);
-        System.out.println("PayDto: " + dto.toString()); // DTO 객체 로깅
         
         PayVO newPay = new PayVO();
         newPay.setCupet_user_id(cupet_user_id);
@@ -38,7 +36,6 @@ public class PayController {
         newPay.setCupet_pay_date(dto.getCupet_pay_date());
         
         payService.insert(newPay);
-        System.out.println(newPay);
         
         //결제 완료 시 포인트 충전
         UserVO user1 = orderService.findUserById(cupet_user_id);
