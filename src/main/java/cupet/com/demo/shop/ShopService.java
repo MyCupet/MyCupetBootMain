@@ -26,4 +26,8 @@ public class ShopService {
 	    List<ShopVO> k = shopMapper.findByNo(prodnos);
 	    return k;
 	}
+	
+	public void decreaseProductCount(int prodno, int orderCount) {
+        shopMapper.updateProductCount(prodno, orderCount);
+    }
 }

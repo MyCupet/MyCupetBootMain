@@ -39,4 +39,5 @@ public interface OrderMapper {
 	
 	@Select("select cupet_prodno FROM cupetorderproduct where cupet_order_no = #{cupet_order_no}")
     List<Integer> findProductNosByOrderNo(int cupet_order_no);
+	
 }

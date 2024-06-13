@@ -3,7 +3,7 @@ package cupet.com.demo.shop;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import cupet.com.demo.dto.PageRequestVO;
@@ -27,5 +27,7 @@ public interface ShopMapper {
 	})
 	List<ShopVO> findByNo(int[] prodnos);
 	
+	 @Update("update cupetshop set cupet_prodcnt = cupet_prodcnt - #{orderCount} where cupet_prodno = #{prodno}")
+	 void updateProductCount(@Param("prodno") int prodno, @Param("orderCount") int orderCount);
 	
 }
