@@ -54,7 +54,6 @@ public class OrderController {
         System.out.println(newOrder);
         
         //orderproduct테이블에 추가하기
-        
         //1. order_no 가져오기 -> 가장 마지막에 추가된 data
         int order_no = orderService.getOrderNo();
         		
@@ -82,9 +81,6 @@ public class OrderController {
             orderService.insertDetail(orderProdVO);
         }
         
-       //아이템 수량 줄이기
-        
-        
         //주문이 완료되면 기존에 장바구니에 있던 품목들 삭제
         List<CartVO> cart = cartService.findByUserId(cupet_user_id); 
         List<Integer> cartnumber = cart.stream().map(CartVO::getCupet_cart_no).toList();
@@ -98,6 +94,14 @@ public class OrderController {
         int afterPoint = beforePoint - orderPoint;
         orderService.payPoint(afterPoint, cupet_user_id);
         
+        Map<Integer, Integer> prodCntMap = cart2.stream().collect(Collectors.toMap(CartProdVO::getCupet_prodno, CartProdVO::getCupet_cartprodcnt));
+        
+        //아이템 수량 줄이기
+        for (Map.Entry<Integer, Integer> entry : prodCntMap.entrySet()) {
+            int prodno = entry.getKey();
+            int orderCount = entry.getValue();
+            shopService.decreaseProductCount(prodno, orderCount);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
@@ -125,5 +129,16 @@ public class OrderController {
         List<ShopVO> products = shopService.findByProdNo(productNos);
 
         return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+    
+    @GetMapping("/api1/user/point")
+    public int getUserPoint (@RequestHeader("Authorization") String jwt, @CookieValue(value = "token", required = false) String token) throws MyCupetBootMainException {
+    	Map<String, Object> m = authService.AuthByUser(jwt);
+        String cupet_user_id = (String) m.get("cupet_user_id");
+        
+        UserVO userinfo = orderService.findUserById(cupet_user_id);
+        int userPoint = Integer.parseInt(userinfo.getCupet_user_point());
+        System.out.println("userPoint = " + userPoint);
+        return userPoint;
     }
 }
