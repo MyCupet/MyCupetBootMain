@@ -34,4 +34,8 @@ public class ShopService {
 	public void decreaseProductCount(int prodno, int orderCount) {
         shopMapper.updateProductCount(prodno, orderCount);
     }
+	
+	public int insert(ShopVO shopVO) {
+		return shopMapper.insert(shopVO);
+	}
 }
