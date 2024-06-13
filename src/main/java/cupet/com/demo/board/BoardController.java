@@ -3,6 +3,7 @@ package cupet.com.demo.board;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import cupet.com.demo.auth.AuthService;
 import cupet.com.demo.board.selectoption.SelectoptionSearchVO;
 import cupet.com.demo.board.selectoption.SelectoptionService;
 import cupet.com.demo.board.selectoption.SelectoptionVO;
+import cupet.com.demo.user.pet.PetVO;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -215,4 +217,23 @@ public class BoardController {
         }
         return "실패";
     }
+    
+    @GetMapping("/recentBoardView")
+	@ResponseBody
+	public Map<String, Object> recentBoardView() {
+		System.out.println("최근 게시물 5개 추출");
+		Map<String, Object> result = new HashMap<>();
+		try {
+			List<BoardVO> recentBoardView = boardService.recentBoardList();
+			List<Integer> recentBoardNoList = recentBoardView.stream().map(BoardVO::getCupet_board_no).collect(Collectors.toList());
+			result.put("cupet_board_no", recentBoardNoList);
+			result.put("recentBoardView", recentBoardView);
+			result.put("status", true);
+		} catch (Exception e) {
+			result.put("error", e.getMessage());
+			result.put("status", false);
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

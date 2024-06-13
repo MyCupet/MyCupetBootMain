@@ -121,4 +121,8 @@ public interface BoardMapper {
     @Update("UPDATE cupetboard SET cupet_board_title = #{cupet_board_title}, cupet_board_content = #{cupet_board_content}, cupet_board_head_no = #{cupet_board_head_no} " +
             "WHERE cupet_board_no = #{cupet_board_no}")
     int getBoardupdate(Map<String, Object> contentData);
+    
+    // 최근 게시물 5개 불러오기
+    @Select("SELECT * FROM cupetboard ORDER BY cupet_board_regdate DESC LIMIT 5")
+    List<BoardVO> getRecentBoard();
 }

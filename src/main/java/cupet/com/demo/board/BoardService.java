@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import lombok.RequiredArgsConstructor;
 
@@ -124,4 +123,14 @@ public class BoardService {
         }
     }
     
+    public List<BoardVO> recentBoardList() {
+        try {
+        	List<BoardVO> boardList = boardMapper.getRecentBoard();
+        	return boardList;
+        } catch (Exception e) {	
+            System.err.println("Error fetching select options: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }
