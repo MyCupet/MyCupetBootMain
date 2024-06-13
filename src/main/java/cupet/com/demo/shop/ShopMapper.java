@@ -14,6 +14,9 @@ public interface ShopMapper {
 	@Select("select * from cupetshop")
 	List<ShopVO> getList(PageRequestVO pageRequestVO);
 	
+	@Select("select * from cupetshop where cupet_prodno = #{cupet_prodno}")
+	ShopVO findByProdNo2(int cupet_prodno);
+	
 	@Select("select count(*) from cupetshop")
 	int getTotalCount(PageRequestVO pageRequestVO);
 	
