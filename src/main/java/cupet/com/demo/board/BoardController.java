@@ -3,7 +3,7 @@ package cupet.com.demo.board;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.stream.Collectors;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +20,8 @@ import cupet.com.demo.board.selectoption.SelectoptionSearchVO;
 import cupet.com.demo.board.selectoption.SelectoptionService;
 import cupet.com.demo.board.selectoption.SelectoptionVO;
 import lombok.RequiredArgsConstructor;
+import cupet.com.demo.user.pet.PetVO;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -184,10 +186,11 @@ public class BoardController {
     }
     
     
-    @PostMapping("/boardUpdate")
+    @PostMapping("/boardUpadte")
     @ResponseBody
     public String boardUpdate(@RequestHeader("Authorization") String token, @RequestBody Map<String, Object> contentData) {
         System.out.println("보드 update");
+        System.out.println("contentData : " + contentData);
         Map<String, Object> userMap = new HashMap<>();
         Map<String, Object> result = new HashMap<>();
 
@@ -215,4 +218,22 @@ public class BoardController {
         }
         return "실패";
     }
+    
+    @GetMapping("/recentBoardView")
+   	@ResponseBody
+   	public Map<String, Object> recentBoardView() {
+   		System.out.println("최근 게시물 5개 추출");
+   		Map<String, Object> result = new HashMap<>();
+   		try {
+   			List<BoardVO> recentBoardView = boardService.recentBoardList();
+  
+   			result.put("recentBoardView", recentBoardView);
+   			result.put("status", true);
+   		} catch (Exception e) {
+   			result.put("error", e.getMessage());
+   			result.put("status", false);
+   			e.printStackTrace();
+   		}
+   		return result;
+   	}
 }

@@ -121,4 +121,14 @@ public interface BoardMapper {
     @Update("UPDATE cupetboard SET cupet_board_title = #{cupet_board_title}, cupet_board_content = #{cupet_board_content}, cupet_board_head_no = #{cupet_board_head_no} " +
             "WHERE cupet_board_no = #{cupet_board_no}")
     int getBoardupdate(Map<String, Object> contentData);
+    
+ // 최근 게시물 5개 불러오기
+    @Select("SELECT b.*, u.cupet_user_nickname \r\n"
+    		+ "FROM cupetboard b \r\n"
+    		+ "JOIN cupetuser u \r\n"
+    		+ "ON b.cupet_user_id = u.cupet_user_id \r\n"
+    		+ "ORDER BY b.cupet_board_regdate DESC \r\n"
+    		+ "LIMIT 5")    
+    List<BoardVO> getRecentBoard();
 }
+

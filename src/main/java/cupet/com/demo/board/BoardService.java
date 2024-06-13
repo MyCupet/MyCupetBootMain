@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import lombok.RequiredArgsConstructor;
 
@@ -109,7 +108,9 @@ public class BoardService {
         	String cupet_now_user_id = (String)contentData.get("cupet_user_id");
         	//글 작성자의 user id
         	String cupet_board_user_id = (boardMapper.getBoardview((int)contentData.get("cupet_board_no"))).cupet_user_id;
-        	
+        	System.out.println("현재로그인 아이디 : " + cupet_now_user_id );
+        	System.out.println("작성자 아이디 : " + cupet_board_user_id );
+
         	if (cupet_now_user_id.equals(cupet_board_user_id)) {
         		int status = boardMapper.getBoardupdate(contentData);
         		return status;
@@ -123,5 +124,17 @@ public class BoardService {
             throw e;
         }
     }
+    
+    public List<BoardVO> recentBoardList() {
+        try {
+        	List<BoardVO> boardList = boardMapper.getRecentBoard();
+        	return boardList;
+        } catch (Exception e) {	
+            System.err.println("Error fetching select options: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+    
     
 }
