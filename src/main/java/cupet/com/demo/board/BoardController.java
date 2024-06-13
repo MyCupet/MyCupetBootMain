@@ -187,7 +187,7 @@ public class BoardController {
     }
     
     
-    @PostMapping("/boardUpadte")
+    @PostMapping("/boardUpdate")
     @ResponseBody
     public String boardUpdate(@RequestHeader("Authorization") String token, @RequestBody Map<String, Object> contentData) {
         System.out.println("보드 update");
@@ -199,10 +199,11 @@ public class BoardController {
 
         try {
         	userMap = authService.AuthByUser(token);
-        	String cupet_user_id = (String)userMap.get("cupet_user_id");
+        	//update한 사람의 user id
+        	String cupet_now_user_id = (String)userMap.get("cupet_user_id");
+        	contentData.put("cupet_now_user_id", cupet_now_user_id);
         	System.out.println(contentData);
         	
-        	contentData.put("cupet_user_id", cupet_user_id);
         	int status = boardService.boardUpdate(contentData);
             result.put("status", true);
         	

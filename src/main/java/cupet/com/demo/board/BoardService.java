@@ -104,17 +104,26 @@ public class BoardService {
     
     public int boardUpdate(Map<String, Object> contentData) {
         try {
+        	
+        	System.out.println("contentData in Service :"+ contentData);
         	//update한 사람의 user id
-        	String cupet_now_user_id = (String)contentData.get("cupet_user_id");
+        	String cupet_now_user_id = (String)contentData.get("cupet_now_user_id");
         	//글 작성자의 user id
-        	String cupet_board_user_id = (boardMapper.getBoardview((int)contentData.get("cupet_board_no"))).cupet_user_id;
+            String cupet_board_no_str = (String) contentData.get("cupet_board_no");
+            int cupet_board_no = Integer.parseInt(cupet_board_no_str);
+        	BoardVO viewData =  boardMapper.getBoardview(cupet_board_no);
+        	String cupet_board_user_id = viewData.getCupet_user_id();
+        	
         	System.out.println("현재로그인 아이디 : " + cupet_now_user_id );
         	System.out.println("작성자 아이디 : " + cupet_board_user_id );
 
         	if (cupet_now_user_id.equals(cupet_board_user_id)) {
+        		System.out.println("유저아이디 일치");
         		int status = boardMapper.getBoardupdate(contentData);
+        		//성공
         		return status;
         	} else {
+        		//실패
         		return 0;
         	}
         
