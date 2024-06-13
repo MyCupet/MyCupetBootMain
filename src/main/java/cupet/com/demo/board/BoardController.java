@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +21,8 @@ import cupet.com.demo.board.selectoption.SelectoptionService;
 import cupet.com.demo.board.selectoption.SelectoptionVO;
 import cupet.com.demo.user.pet.PetVO;
 import lombok.RequiredArgsConstructor;
+import cupet.com.demo.user.pet.PetVO;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -186,10 +187,11 @@ public class BoardController {
     }
     
     
-    @PostMapping("/boardUpdate")
+    @PostMapping("/boardUpadte")
     @ResponseBody
     public String boardUpdate(@RequestHeader("Authorization") String token, @RequestBody Map<String, Object> contentData) {
         System.out.println("보드 update");
+        System.out.println("contentData : " + contentData);
         Map<String, Object> userMap = new HashMap<>();
         Map<String, Object> result = new HashMap<>();
 

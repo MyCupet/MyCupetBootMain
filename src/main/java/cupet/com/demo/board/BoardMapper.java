@@ -122,6 +122,7 @@ public interface BoardMapper {
             "WHERE cupet_board_no = #{cupet_board_no}")
     int getBoardupdate(Map<String, Object> contentData);
     
+
     // 최근 게시물 5개 불러오기
     @Select("SELECT b.*, u.cupet_user_nickname, cbh.cupet_board_head_name \r\n"
     		+ "FROM cupetboard b \r\n"
@@ -133,3 +134,4 @@ public interface BoardMapper {
     		+ "LIMIT 5")
     List<BoardVO> getRecentBoard();
 }
+
