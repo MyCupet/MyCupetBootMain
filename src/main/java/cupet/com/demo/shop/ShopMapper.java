@@ -27,9 +27,12 @@ public interface ShopMapper {
 	 @Update("update cupetshop set cupet_prodcnt = cupet_prodcnt - #{orderCount} where cupet_prodno = #{prodno}")
 	 void updateProductCount(@Param("prodno") int prodno, @Param("orderCount") int orderCount);
 	
-	 @Insert("insert into cupetshop (cupet_prodname, cupet_prodprice, cupet_prodimgpath, cupet_proddiscountper, cupet_prodcont, cupet_prodcnt)"
-	 		+ "values (#{cupet_prodname}, #{cupet_prodprice}, #{cupet_prodimgpath}, #{cupet_proddiscountper}, #{cupet_prodcont}, #{cupet_prodcnt})")
-	@Options(keyProperty = "cupet_prodno")
-	 int insert(ShopVO shopVO);
+	 @Insert("insert into cupetshop (cupet_prodname, cupet_prodprice, cupet_proddiscountper, cupet_prodcont, cupet_prodcnt) " +
+		        "values (#{cupet_prodname}, #{cupet_prodprice}, #{cupet_proddiscountper}, #{cupet_prodcont}, #{cupet_prodcnt})")
+	@Options(useGeneratedKeys = true, keyProperty = "cupet_prodno", keyColumn = "cupet_prodno")
+	int insert(ShopVO shopVO);
+
+	 
+	 
 	 
 }
