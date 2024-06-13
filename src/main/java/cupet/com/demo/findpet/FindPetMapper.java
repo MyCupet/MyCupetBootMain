@@ -3,8 +3,10 @@ package cupet.com.demo.findpet;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
@@ -64,6 +66,6 @@ public interface FindPetMapper {
 	@Select("select * from cupetpet_missing_comment where cupet_pet_no = #{cupet_pet_no}")
 	List<MissingPetCommentVO> getMisssingPetComments(String petNo);
 
-
-
+	@Delete("DELETE FROM cupetpet_missing_comment WHERE comment_no = #{comment_no}")
+    void deleteComment(@Param("comment_no") String comment_no);
 }

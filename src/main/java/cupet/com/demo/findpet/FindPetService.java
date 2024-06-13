@@ -132,4 +132,15 @@ public class FindPetService {
 		System.out.println(list);
 		return list;
 	}
+	
+	public String commentDelete(String commet_no) {
+        try {
+        	findPetMapper.deleteComment(commet_no);
+            return commet_no;
+        } catch (Exception e) {
+            System.err.println("Error deleting comment: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

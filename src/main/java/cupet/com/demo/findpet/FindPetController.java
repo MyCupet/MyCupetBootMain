@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import cupet.com.demo.MyCupetBootMainException;
@@ -158,6 +159,24 @@ public class FindPetController implements MyCupetDbInterface {
 		List<MissingPetCommentVO> list = findPetService.getMisssingPetComments(petNo);
 		res.put("list", list);
 		return res;
+	}
+	
+	@PostMapping("/commentDelete")
+	@ResponseBody
+	public Map<String, Object> commentDelete(@RequestBody Map<String, String> request) {
+		System.out.println("댓글 삭제 요청");
+		String comment_no = request.get("comment_no");
+		Map<String, Object> result = new HashMap<>();
+		try {
+			String deleteComment = findPetService.commentDelete(comment_no);
+			result.put("deleteComment", deleteComment);
+			result.put("status", true);
+		} catch (Exception e) {
+			result.put("error", e.getMessage());
+			result.put("status", false);
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 }
