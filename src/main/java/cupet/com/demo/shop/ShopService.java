@@ -27,6 +27,10 @@ public class ShopService {
 	    return k;
 	}
 	
+	public ShopVO findByProdNo2(int cupet_prodno) {
+	    return shopMapper.findByProdNo2(cupet_prodno);
+	}
+	
 	public void decreaseProductCount(int prodno, int orderCount) {
         shopMapper.updateProductCount(prodno, orderCount);
     }
