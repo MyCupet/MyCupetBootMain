@@ -225,8 +225,6 @@ public class BoardController {
 		Map<String, Object> result = new HashMap<>();
 		try {
 			List<BoardVO> recentBoardView = boardService.recentBoardList();
-			List<Integer> recentBoardNoList = recentBoardView.stream().map(BoardVO::getCupet_board_no).collect(Collectors.toList());
-			result.put("cupet_board_no", recentBoardNoList);
 			result.put("recentBoardView", recentBoardView);
 			result.put("status", true);
 		} catch (Exception e) {
