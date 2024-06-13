@@ -128,7 +128,7 @@ public interface BoardMapper {
     		+ "JOIN cupetuser u \r\n"
     		+ "ON b.cupet_user_id = u.cupet_user_id \r\n"
     		+ "ORDER BY b.cupet_board_regdate DESC \r\n"
-    		+ "LIMIT 5")    
+    		+ "LIMIT 5")
     List<BoardVO> getRecentBoard();
 }
 

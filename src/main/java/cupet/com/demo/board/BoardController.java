@@ -19,6 +19,7 @@ import cupet.com.demo.auth.AuthService;
 import cupet.com.demo.board.selectoption.SelectoptionSearchVO;
 import cupet.com.demo.board.selectoption.SelectoptionService;
 import cupet.com.demo.board.selectoption.SelectoptionVO;
+import cupet.com.demo.user.pet.PetVO;
 import lombok.RequiredArgsConstructor;
 import cupet.com.demo.user.pet.PetVO;
 
@@ -220,20 +221,19 @@ public class BoardController {
     }
     
     @GetMapping("/recentBoardView")
-   	@ResponseBody
-   	public Map<String, Object> recentBoardView() {
-   		System.out.println("최근 게시물 5개 추출");
-   		Map<String, Object> result = new HashMap<>();
-   		try {
-   			List<BoardVO> recentBoardView = boardService.recentBoardList();
-  
-   			result.put("recentBoardView", recentBoardView);
-   			result.put("status", true);
-   		} catch (Exception e) {
-   			result.put("error", e.getMessage());
-   			result.put("status", false);
-   			e.printStackTrace();
-   		}
-   		return result;
-   	}
+	@ResponseBody
+	public Map<String, Object> recentBoardView() {
+		System.out.println("최근 게시물 5개 추출");
+		Map<String, Object> result = new HashMap<>();
+		try {
+			List<BoardVO> recentBoardView = boardService.recentBoardList();
+			result.put("recentBoardView", recentBoardView);
+			result.put("status", true);
+		} catch (Exception e) {
+			result.put("error", e.getMessage());
+			result.put("status", false);
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
