@@ -21,4 +21,6 @@ public class UserVO {
 	public String cupet_user_principle;
 	public String cupet_user_birth;
 	public String cupet_user_email;
+	public String roadAddress;
+	public String detailAddress;
 }
