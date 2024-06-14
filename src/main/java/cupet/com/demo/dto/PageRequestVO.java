@@ -24,17 +24,17 @@ public class PageRequestVO {
     private int pageNo = 1;
 
     @Builder.Default
-    @Min(value = 10)
+    @Min(value = 9)
     @Max(value = 100)
     @Positive
-    private int size = 10;
+    private int size = 9;
 
     private String link;
 
     private String searchKey;
 
     public int getSkip(){
-        return (pageNo - 1) * 10;
+        return (pageNo - 1) * 9;
     }
 
 	public String getLink() {
