@@ -31,8 +31,8 @@ public interface ShopMapper {
 		        "values (#{cupet_prodname}, #{cupet_prodprice}, #{cupet_proddiscountper}, #{cupet_prodcont}, #{cupet_prodcnt})")
 	@Options(useGeneratedKeys = true, keyProperty = "cupet_prodno", keyColumn = "cupet_prodno")
 	int insert(ShopVO shopVO);
+	 
+	 @Delete("delete from cupetshop where cupet_prodno = #{cupet_prodno}")
+	    int delete(@Param("cupet_prodno") int cupet_prodno);
 
-	 
-	 
-	 
 }

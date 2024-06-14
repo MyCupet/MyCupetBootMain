@@ -60,7 +60,6 @@ public class OrderController {
         List<CartVO> cart1 = cartService.findByUserId(cupet_user_id);
         List<Integer> cartt = cart1.stream().map(CartVO::getCupet_cart_no).toList();
         List<CartProdVO> cart2 = cartService.findByCartNo(cartt); 
-        System.out.println("cart2 = " + cart2);
         List<Integer> prodnoList = cart2.stream().map(CartProdVO::getCupet_prodno).toList();
         
         //3. orderprice가져오기

@@ -10,7 +10,6 @@ public class ShopVO {
     private String cupet_prodname;
     private int cupet_prodprice;
     private String cupet_prodcont;
-    private String cupet_prodimgpath;
     private int cupet_proddiscountper;
     private int cupet_prodcnt;
 }
