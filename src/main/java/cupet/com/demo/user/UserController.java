@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -178,5 +180,15 @@ public class UserController {
 		System.out.println(userDetail);
 		
 		return userDetail;
+    }
+	
+	@DeleteMapping("/deleteusers")
+    public ResponseEntity<Map<String, Object>> deleteUsers(@RequestBody List<String> userIds, @CookieValue(value = "token", required = false) String token) {
+        int deletedCount = userService.deleteUsers(userIds);
+        Map<String, Object> response = new HashMap<>();
+        response.put("deletedCount", deletedCount);
+        response.put("message", "정보 삭제 성공");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
