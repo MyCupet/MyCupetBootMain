@@ -34,8 +34,10 @@ public interface UserMapper {
     @Select("select * from cupetuser")
     List<UserVO> getAllUsers();
     
-    @Select("select * from cupetuser where cupet_user_id = #{cupet_user_id}")
+    @Select("select cu.*, ad.roadAddress, ad.detailAddress from cupetuser cu inner join cupetuseraddress ad on ad.cupet_user_id = cu.cupet_user_id where cu.cupet_user_id = #{cupet_user_id}")
     UserVO getUserById(@Param("cupet_user_id") String cupet_user_id);
+
+
     
     @Delete({
         "<script>",
