@@ -1,5 +1,7 @@
 package cupet.com.demo.user;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -50,5 +52,13 @@ public class UserService {
             e.printStackTrace();
             throw e;
         }
+    }
+	
+	public List<UserVO> getAllUsers() {
+        return userMapper.getAllUsers();
+    }
+	
+	public UserVO getUserById(String cupet_user_id) {
+        return userMapper.getUserById(cupet_user_id);
     }
 }

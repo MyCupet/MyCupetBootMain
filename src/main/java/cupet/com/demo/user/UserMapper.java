@@ -1,5 +1,7 @@
 package cupet.com.demo.user;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -28,4 +30,10 @@ public interface UserMapper {
     
     @Delete("DELETE FROM cupetuser WHERE cupet_user_id = #{cupet_user_id}")
     void deleteUser(@Param("cupet_user_id") String cupet_user_id);
+    
+    @Select("select * from cupetuser")
+    List<UserVO> getAllUsers();
+    
+    @Select("select * from cupetuser where cupet_user_id = #{cupet_user_id}")
+    UserVO getUserById(@Param("cupet_user_id") String cupet_user_id);
 }

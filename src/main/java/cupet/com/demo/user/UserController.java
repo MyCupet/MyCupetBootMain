@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -160,4 +163,20 @@ public class UserController {
 		}
 		return result;
 	}
+	
+	
+	@GetMapping("/getallusers")
+	public List<UserVO> getAllUsers() {
+	  List<UserVO> userInfo = userService.getAllUsers();
+	  
+	  return userInfo;
+	}
+	
+	@GetMapping("/usersDetail/{cupet_user_id}")
+    public UserVO getUserById(@PathVariable("cupet_user_id") String cupet_user_id) {
+		UserVO userDetail= userService.getUserById(cupet_user_id);
+		System.out.println(userDetail);
+		
+		return userDetail;
+    }
 }
