@@ -15,11 +15,14 @@ public class ShopService {
 	private final ShopMapper shopMapper;
 	
 	public PageResponseVO<ShopVO> getList(PageRequestVO pageRequestVO) {
-    	List<ShopVO> list = shopMapper.getList(pageRequestVO);
-    	int total = shopMapper.getTotalCount(pageRequestVO);
+        int skip = pageRequestVO.getSkip();
+        int size = pageRequestVO.getSize();
 
-    	return new PageResponseVO<>(list ,total, pageRequestVO.getSize(), pageRequestVO.getPageNo());
-    	}
+        List<ShopVO> list = shopMapper.getList(size, skip);
+        int total = shopMapper.getTotalCount();
+
+        return new PageResponseVO<>(list, total, pageRequestVO.getPageNo(), size);
+    }
 	
 	public List<ShopVO> findByProdNo(List<Integer> cupet_prodno) {
 	    int[] prodnos = cupet_prodno.stream().mapToInt(Integer::intValue).toArray();

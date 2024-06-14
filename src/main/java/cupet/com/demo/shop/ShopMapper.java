@@ -10,14 +10,14 @@ import cupet.com.demo.dto.PageRequestVO;
 @Mapper
 @Repository("shopMapper")
 public interface ShopMapper {
-	@Select("select * from cupetshop")
-	List<ShopVO> getList(PageRequestVO pageRequestVO);
+	@Select("select * from cupetshop order by cupet_prodno desc limit #{size} offset #{skip}")
+    List<ShopVO> getList(@Param("size") int size, @Param("skip") int skip);
+
+    @Select("select count(*) from cupetshop")
+    int getTotalCount();
 	
 	@Select("select * from cupetshop where cupet_prodno = #{cupet_prodno}")
 	ShopVO findByProdNo2(int cupet_prodno);
-	
-	@Select("select count(*) from cupetshop")
-	int getTotalCount(PageRequestVO pageRequestVO);
 	
 	@Select({
 	    "<script> select * from cupetshop where cupet_prodno in <foreach item='item' index='index' collection='array' open='(' separator=',' close=')'>",
