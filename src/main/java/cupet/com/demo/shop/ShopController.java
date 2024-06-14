@@ -43,5 +43,17 @@ public class ShopController {
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+    
+    @DeleteMapping("/shop/delete/{cupet_prodno}")
+    public ResponseEntity<Map<String, Object>> deleteProduct(@PathVariable("cupet_prodno") int cupet_prodno, @CookieValue(value = "token", required = false) String token) {
+
+        int deletedProduct = shopService.delete(cupet_prodno);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("cupet_prodno", cupet_prodno);
+        response.put("message", "상품 삭제 성공");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 }

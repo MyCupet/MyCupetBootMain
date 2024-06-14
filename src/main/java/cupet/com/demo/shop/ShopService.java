@@ -38,4 +38,8 @@ public class ShopService {
 	public int insert(ShopVO shopVO) {
 		return shopMapper.insert(shopVO);
 	}
+	
+	public int delete(int cupet_prodno) {
+        return shopMapper.delete(cupet_prodno);
+    }
 }
