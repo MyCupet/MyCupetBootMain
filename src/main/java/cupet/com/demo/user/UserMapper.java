@@ -36,4 +36,14 @@ public interface UserMapper {
     
     @Select("select * from cupetuser where cupet_user_id = #{cupet_user_id}")
     UserVO getUserById(@Param("cupet_user_id") String cupet_user_id);
+    
+    @Delete({
+        "<script>",
+        "DELETE FROM cupetuser WHERE cupet_user_id IN ",
+        "<foreach item='id' collection='userIds' open='(' separator=',' close=')'>",
+        "#{id}",
+        "</foreach>",
+        "</script>"
+    })
+    int deleteUsers(@Param("userIds") List<String> userIds);
 }

@@ -61,4 +61,8 @@ public class UserService {
 	public UserVO getUserById(String cupet_user_id) {
         return userMapper.getUserById(cupet_user_id);
     }
+	
+	public int deleteUsers(List<String> userIds) {
+        return userMapper.deleteUsers(userIds);
+    }
 }
