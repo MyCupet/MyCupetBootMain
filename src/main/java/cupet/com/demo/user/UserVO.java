@@ -20,4 +20,5 @@ public class UserVO {
 	public String cupet_user_point;
 	public String cupet_user_principle;
 	public String cupet_user_birth;
+	public String cupet_user_email;
 }
