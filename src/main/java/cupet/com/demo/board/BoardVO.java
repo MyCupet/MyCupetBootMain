@@ -20,7 +20,7 @@ public class BoardVO {
     public String cupet_user_name;
     public String cupet_user_nickname;
     public String cupet_board_head_name;
-
+    public String isNew;
 
     
 }

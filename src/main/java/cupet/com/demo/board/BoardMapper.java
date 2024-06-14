@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository("boardMapper")
 public interface BoardMapper {
     // 머릿말 전체, 검색어 없음
-    @Select("SELECT B.*, he.* " +
+    @Select("SELECT B.*, he.*, CASE WHEN B.cupet_board_regdate > DATE_ADD(NOW(), INTERVAL -1 DAY) THEN true ELSE false END AS isNew " +
             "FROM (SELECT b.*, u.cupet_user_name, u.cupet_user_nickname " +
             "      FROM cupetboard b " +
             "      JOIN cupetuser u ON b.cupet_user_id = u.cupet_user_id) AS B " +
@@ -23,7 +23,7 @@ public interface BoardMapper {
     List<BoardVO> getAllBoardList();
     
     // 머릿말 전체, 검색어 있음 - 제목 + 내용
-    @Select("SELECT B.*, he.* " +
+    @Select("SELECT B.*, he.*, CASE WHEN B.cupet_board_regdate > DATE_ADD(NOW(), INTERVAL -1 DAY) THEN true ELSE false END AS isNew " +
             "FROM (SELECT b.*, u.cupet_user_name, u.cupet_user_nickname " +
             "      FROM cupetboard b " +
             "      JOIN cupetuser u ON b.cupet_user_id = u.cupet_user_id " +
@@ -34,7 +34,7 @@ public interface BoardMapper {
     List<BoardVO> SearchBoardList(String searchKeyword);
     
     // 머릿말 전체, 검색어 있음 - 제목
-    @Select("SELECT B.*, he.* " +
+    @Select("SELECT B.*, he.*, CASE WHEN B.cupet_board_regdate > DATE_ADD(NOW(), INTERVAL -1 DAY) THEN true ELSE false END AS isNew " +
             "FROM (SELECT b.*, u.cupet_user_name, u.cupet_user_nickname " +
             "      FROM cupetboard b " +
             "      JOIN cupetuser u ON b.cupet_user_id = u.cupet_user_id " +
@@ -44,7 +44,7 @@ public interface BoardMapper {
     List<BoardVO> SearchTitleBoardList(String searchKeyword);
     
     // 머릿말 전체, 검색어 있음 - 작성자
-    @Select("SELECT B.*, he.* " +
+    @Select("SELECT B.*, he.*, CASE WHEN B.cupet_board_regdate > DATE_ADD(NOW(), INTERVAL -1 DAY) THEN true ELSE false END AS isNew " +
             "FROM (SELECT b.*, u.cupet_user_name, u.cupet_user_nickname " +
             "      FROM cupetboard b " +
             "      JOIN cupetuser u ON b.cupet_user_id = u.cupet_user_id " +
@@ -54,7 +54,7 @@ public interface BoardMapper {
     List<BoardVO> SearchWriterBoardList(String searchKeyword);
     
     // 머릿말 검색, 검색어 없음
-    @Select("SELECT B.*, he.* " +
+    @Select("SELECT B.*, he.*, CASE WHEN B.cupet_board_regdate > DATE_ADD(NOW(), INTERVAL -1 DAY) THEN true ELSE false END AS isNew " +
             "FROM (SELECT b.*, u.cupet_user_name, u.cupet_user_nickname " +
             "      FROM cupetboard b " +
             "      JOIN cupetuser u ON b.cupet_user_id = u.cupet_user_id) AS B " +
@@ -64,7 +64,7 @@ public interface BoardMapper {
     List<BoardVO> HeadSelectBoardList(int cupet_board_head_no);
     
     // 머릿말 검색, 검색어 있음 - 제목 + 내용
-    @Select("SELECT B.*, he.* " +
+    @Select("SELECT B.*, he.*, CASE WHEN B.cupet_board_regdate > DATE_ADD(NOW(), INTERVAL -1 DAY) THEN true ELSE false END AS isNew " +
             "FROM (SELECT b.*, u.cupet_user_name, u.cupet_user_nickname " +
             "      FROM cupetboard b " +
             "      JOIN cupetuser u ON b.cupet_user_id = u.cupet_user_id " +
@@ -76,7 +76,7 @@ public interface BoardMapper {
     List<BoardVO> SearchHeadBoardList(int cupet_board_head_no, String searchKeyword);
     
     // 머릿말 검색, 검색어 있음 - 제목
-    @Select("SELECT B.*, he.* " +
+    @Select("SELECT B.*, he.*, CASE WHEN B.cupet_board_regdate > DATE_ADD(NOW(), INTERVAL -1 DAY) THEN true ELSE false END AS isNew " +
             "FROM (SELECT b.*, u.cupet_user_name, u.cupet_user_nickname " +
             "      FROM cupetboard b " +
             "      JOIN cupetuser u ON b.cupet_user_id = u.cupet_user_id " +
@@ -87,7 +87,7 @@ public interface BoardMapper {
     List<BoardVO> SearchHeadTitleBoardList(int cupet_board_head_no, String searchKeyword);
     
     // 머릿말 검색, 검색어 있음 - 작성자
-    @Select("SELECT B.*, he.* " +
+    @Select("SELECT B.*, he.*, CASE WHEN B.cupet_board_regdate > DATE_ADD(NOW(), INTERVAL -1 DAY) THEN true ELSE false END AS isNew " +
             "FROM (SELECT b.*, u.cupet_user_name, u.cupet_user_nickname " +
             "      FROM cupetboard b " +
             "      JOIN cupetuser u ON b.cupet_user_id = u.cupet_user_id " +
