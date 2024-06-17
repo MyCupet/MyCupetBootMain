@@ -18,4 +18,9 @@ public class BoardVO {
     public int cupet_board_head_no;
     public String cupet_user_id;
     public String cupet_user_name;
+    public String cupet_user_nickname;
+    public String cupet_board_head_name;
+    public String isNew;
+
+    
 }

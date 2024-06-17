@@ -7,6 +7,5 @@ public class CartVO {
 	
 	private int cupet_cart_no;
 	private String cupet_user_id;
-	private int cupet_prodno;
 	
 }
