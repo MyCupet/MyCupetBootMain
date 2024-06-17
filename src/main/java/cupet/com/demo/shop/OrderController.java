@@ -44,6 +44,7 @@ public class OrderController {
         OrderVO newOrder = new OrderVO();
         newOrder.setCupet_user_id(cupet_user_id);
         newOrder.setCupet_receiver_name(dto.getName());
+        newOrder.setCupet_receiver_postcode(dto.getPostcode());
         newOrder.setCupet_receiver_add(dto.getAddress());
         newOrder.setCupet_receiver_phone(dto.getPhone());
         newOrder.setCupet_total_price(dto.getPrice()); 

@@ -7,6 +7,7 @@ public class OrderVO {
 	int cupet_order_no;
 	String cupet_user_id;
 	String cupet_receiver_name;
+	String cupet_receiver_postcode;
 	String cupet_receiver_add;
 	String cupet_receiver_phone;
 	int cupet_total_price;
