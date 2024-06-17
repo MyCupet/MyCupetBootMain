@@ -17,8 +17,8 @@ public interface OrderMapper {
 	@Select("select * from cupetuser where cupet_user_id = #{cupet_user_id}")
 	UserVO findUserById(String cupet_user_id);
 	
-	@Insert("insert into cupetorder (cupet_user_id, cupet_receiver_name, cupet_receiver_add, cupet_receiver_phone, cupet_total_price, cupet_order_date) "
-	        + "values (#{cupet_user_id}, #{cupet_receiver_name}, #{cupet_receiver_add}, #{cupet_receiver_phone}, #{cupet_total_price}, #{cupet_order_date})")
+	@Insert("insert into cupetorder (cupet_user_id, cupet_receiver_name, cupet_receiver_postcode, cupet_receiver_add, cupet_receiver_phone, cupet_total_price, cupet_order_date) "
+	        + "values (#{cupet_user_id}, #{cupet_receiver_name}, #{cupet_receiver_postcode}, #{cupet_receiver_add}, #{cupet_receiver_phone}, #{cupet_total_price}, #{cupet_order_date})")
 	@Options(keyProperty = "cupet_order_no")
 	int insert(OrderVO orderVO);
 	
