@@ -1,7 +1,7 @@
 # Dockerfile
 
-# AdoptOpenJDK 17을 베이스 이미지로 사용
-FROM adoptopenjdk:17-jdk-hotspot
+# OpenJDK 17을 베이스 이미지로 사용
+FROM openjdk:17-jdk
 
 # 작업 디렉토리 설정
 WORKDIR /app
