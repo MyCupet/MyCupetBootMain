@@ -2,6 +2,7 @@ package cupet.com.demo.auth;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -11,9 +12,13 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class AuthProvider {
+	
+	@Value("${dispatch.ip}")
+	private String value;
 
 	public Map<String, Object> getAuthenticationByData(String token) {
-		WebClient webClient = WebClient.builder().baseUrl("http://localhost:9092").build();
+		String tmp  = "http://"+value+":9092";
+		WebClient webClient = WebClient.builder().baseUrl(tmp).build();
 		try {
 			Mono<Map<String, Object>> res = webClient.get().uri("/BootMain/auth-token/user")
 					.header("Authorization", token).retrieve()
