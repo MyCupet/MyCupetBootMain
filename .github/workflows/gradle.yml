@@ -29,6 +29,26 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build --no-daemon
 
+    #사용된 환경 변수
+    - name: Set Environment
+      env:
+        SERVER_PORT: ${{secret.SERVER_PORT}}
+        DISPATCH.IP: ${{secret.DISPATCH.IP}}
+        DB_URL: ${{secret.DB_URL}}
+        DB_USERNAME: ${{secret.DB_USERNAME}}
+        DB_PASSWORD: ${{secret.DB_PASSWORD}}
+        S3_ACCESSKEY: ${{secret.S3_ACCESSKEY}}
+        S3_SECRETKEY: ${{secret.S3_SECRETKEY}}
+        API_KEY: ${{secret.API_KEY}}
+        API_SECRET: ${{secret.API_SECRET}}
+        
+        
+        
+        
+    
+
+      
+
     - name: Build Docker image
       run: |
         docker build -t your-docker-image-name .
