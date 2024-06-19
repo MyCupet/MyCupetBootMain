@@ -10,55 +10,65 @@ on:
 
 jobs:
   build-and-deploy:
-
     runs-on: ubuntu-latest
 
+    env:  # Environment variables defined for the entire job
+      SERVER_PORT: 9090
+      DISPATCH_IP: ${{ secrets.DISPATCH_IP }}
+      DB_URL: ${{ secrets.DB_URL }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      S3_ACCESSKEY: ${{ secrets.S3_ACCESSKEY }}
+      S3_SECRETKEY: ${{ secrets.S3_SECRETKEY }}
+      API_KEY: ${{ secrets.API_KEY }}
+      API_SECRET: ${{ secrets.API_SECRET }}
+
     steps:
-      - name: 소스 코드 체크아웃
+      - name: Checkout 소스 코드
         uses: actions/checkout@v2
 
-      - name: JDK 17 설정
+      - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
           java-version: '17'
 
-      - name: Gradlew 실행 권한 부여
+      - name: Grant execute permission for Gradlew
         run: chmod +x ./gradlew
 
-      - name: Gradle로 빌드
+      - name: Build with Gradle
         run: ./gradlew clean build -x test
 
-      - name: Docker 이미지 빌드
+      - name: Build Docker image
         run: |
           docker build -t my-cupet-boot-main .
           docker tag my-cupet-boot-main mydockerhubusername/my-cupet-boot-main:latest
 
-      - name: Docker 레지스트리 로그인
+      - name: Login to Docker registry
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Docker 이미지 레지스트리에 푸시
+      - name: Push Docker image to registry
         run: docker push mydockerhubusername/my-cupet-boot-main:latest
 
-      - name: NCP에 배포
+      - name: Deploy to NCP
         run: |
           curl -X POST \
-            -H "Authorization: Basic ${{ secrets.NCP_AUTH }}" \
+            -u "${{ secrets.NCP_ACCESS_KEY }}:${{ secrets.NCP_SECRET_KEY }}" \
             -H "Content-Type: application/json" \
             -d '{"image": "mydockerhubusername/my-cupet-boot-main:latest", "name": "my-cupet-boot-main", "port": 9090}' \
             https://ncloud.apigw.ntruss.com/vserver/v2/startServerInstances
 
-      - name: 환경 변수 설정
+      - name: Set Environment Variables
         run: |
-          echo "SERVER_PORT=9090" >> $GITHUB_ENV
-          echo "DISPATCH_IP=${{ secrets.DISPATCH_IP }}" >> $GITHUB_ENV
-          echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
-          echo "S3_ACCESSKEY=${{ secrets.S3_ACCESSKEY }}" >> $GITHUB_ENV
-          echo "S3_SECRETKEY=${{ secrets.S3_SECRETKEY }}" >> $GITHUB_ENV
-          echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
-          echo "API_SECRET=${{ secrets.API_SECRET }}" >> $GITHUB_ENV
+          echo "SERVER_PORT=${SERVER_PORT}" >> $GITHUB_ENV
+          echo "DISPATCH_IP=${DISPATCH_IP}" >> $GITHUB_ENV
+          echo "DB_URL=${DB_URL}" >> $GITHUB_ENV
+          echo "DB_USERNAME=${DB_USERNAME}" >> $GITHUB_ENV
+          echo "DB_PASSWORD=${DB_PASSWORD}" >> $GITHUB_ENV
+          echo "S3_ACCESSKEY=${S3_ACCESSKEY}" >> $GITHUB_ENV
+          echo "S3_SECRETKEY=${S3_SECRETKEY}" >> $GITHUB_ENV
+          echo "API_KEY=${API_KEY}" >> $GITHUB_ENV
+          echo "API_SECRET=${API_SECRET}" >> $GITHUB_ENV
