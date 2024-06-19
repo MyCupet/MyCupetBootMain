@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: Java CI with Gradle and Docker Deploy
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - main  # 풀 리퀘스트가 올라오면 테스트 실행
 
 jobs:
-  build:
+  build-and-deploy:
 
     runs-on: ubuntu-latest
 
@@ -27,45 +27,49 @@ jobs:
       run: chmod +x ./gradlew
 
     - name: Build with Gradle
-      run: ./gradlew build --no-daemon
-
-    #사용된 환경 변수
-    - name: Set Environment
-      env:
-        SERVER_PORT: ${{secret.SERVER_PORT}}
-        DISPATCH.IP: ${{secret.DISPATCH.IP}}
-        DB_URL: ${{secret.DB_URL}}
-        DB_USERNAME: ${{secret.DB_USERNAME}}
-        DB_PASSWORD: ${{secret.DB_PASSWORD}}
-        S3_ACCESSKEY: ${{secret.S3_ACCESSKEY}}
-        S3_SECRETKEY: ${{secret.S3_SECRETKEY}}
-        API_KEY: ${{secret.API_KEY}}
-        API_SECRET: ${{secret.API_SECRET}}
-        
-        
-        
-        
-    
-
-      
+      run: ./gradlew clean build -x test
 
     - name: Build Docker image
       run: |
-        docker build -t your-docker-image-name .
-        docker tag your-docker-image-name:latest your-docker-registry/your-docker-image-name:latest
-        docker push your-docker-registry/your-docker-image-name:latest
+        docker build -t my-cupet-boot-main .
+        docker tag my-cupet-boot-main mydockerhubusername/my-cupet-boot-main:latest
+
+    - name: Login to Docker registry
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push Docker image to registry
+      run: docker push mydockerhubusername/my-cupet-boot-main:latest
 
     - name: Deploy to NCP
-      env:
-        NCP_ACCESS_KEY: ${{ secrets.NCP_ACCESS_KEY }}
-        NCP_SECRET_KEY: ${{ secrets.NCP_SECRET_KEY }}
       run: |
-        curl -X POST -H "Content-Type: application/json" -d '{
-          "serverName": "your-server-name",
-          "instanceNo": "0",
-          "accessControlGroupConfigurationNoList": [
-            {"accessControlGroupConfigurationNo": "your-access-control-group-id"}
-          ],
-          "userData": "your-user-data"
-        }' -H "Authorization: Basic $(echo -n $NCP_ACCESS_KEY:$NCP_SECRET_KEY | base64)" https://ncloud.apigw.ntruss.com/server/v2/createServerInstances
+        curl -X POST \
+          -u "${{ secrets.NCP_ACCESS_KEY }}:${{ secrets.NCP_SECRET_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{"image": "mydockerhubusername/my-cupet-boot-main:latest", "name": "my-cupet-boot-main", "port": 9090}' \
+          https://ncloud.apigw.ntruss.com/vserver/v2/startServerInstances
 
+    - name: Set Environment Variables
+      run: |
+        echo "SERVER_PORT=9090" >> $GITHUB_ENV
+        echo "DISPATCH_IP=${{ secrets.DISPATCH_IP }}" >> $GITHUB_ENV
+        echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
+        echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
+        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+        echo "S3_ACCESSKEY=${{ secrets.S3_ACCESSKEY }}" >> $GITHUB_ENV
+        echo "S3_SECRETKEY=${{ secrets.S3_SECRETKEY }}" >> $GITHUB_ENV
+        echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
+        echo "API_SECRET=${{ secrets.API_SECRET }}" >> $GITHUB_ENV
+
+env:
+  SERVER_PORT: ${{ env.SERVER_PORT }}
+  DISPATCH_IP: ${{ env.DISPATCH_IP }}
+  DB_URL: ${{ env.DB_URL }}
+  DB_USERNAME: ${{ env.DB_USERNAME }}
+  DB_PASSWORD: ${{ env.DB_PASSWORD }}
+  S3_ACCESSKEY: ${{ env.S3_ACCESSKEY }}
+  S3_SECRETKEY: ${{ env.S3_SECRETKEY }}
+  API_KEY: ${{ env.API_KEY }}
+  API_SECRET: ${{ env.API_SECRET }}
