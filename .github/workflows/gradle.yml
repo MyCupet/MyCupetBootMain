@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-20.04
       
     steps:
-      - name: Checkout 소스 코드
+      - name: Checkout source code
         uses: actions/checkout@v2
 
       - name: Set up JDK 17
@@ -48,8 +48,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_REPO }}:${{ github.sha }}
-    
+          docker build -t ${{ secrets.DOCKER_REPO }}:${{ github.sha }} .
+
       - name: Push Docker image to registry
         run: docker push ${{ secrets.DOCKER_REPO }}:${{ github.sha }}
 
