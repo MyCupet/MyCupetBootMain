@@ -14,7 +14,7 @@ jobs:
 
     env:
       DOCKER_IMAGE_NAME: my-cupet-boot-main  # Docker 이미지 이름
-      DOCKER_REGISTRY: mydockerhubusername/starsongrepo  # Docker Hub 레지스트리 이름
+      DOCKER_REGISTRY: starsong0422/starsongrepo  # Docker Hub 레지스트리 이름
       SERVER_PORT: ${{ secrets.SERVER_PORT }}
       DISPATCH_IP: ${{ secrets.DISPATCH_IP }}
       DB_URL: ${{ secrets.DB_URL }}
