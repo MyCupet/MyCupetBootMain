@@ -8,22 +8,24 @@ on:
     branches:
       - main
 
-env:
-  VER: ${{ github.sha }}
-  SERVER_PORT: 9090
-  DB_USERNAME: ${{ secrets.DB_USERNAME }}
-  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-  DB_URL: jdbc:mysql://localhost:3306/mydatabase
-  DISPATCH.IP: ${{ secrets.DISPATCH.IP }}
-  S3_ACCESSKEY: ${{ secrets.S3_ACCESSKEY }}
-  S3_SECRETKEY: ${{ secrets.S3_SECRETKEY }}
-  API_KEY: ${{ secrets.API_KEY }}
-  API_SECRET: ${{ secrets.API_SECRET }}
+
 
 
 jobs:
   build:
     runs-on: ubuntu-20.04
+
+    env:
+      VER: ${{ github.sha }}
+      SERVER_PORT: 9090
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_URL: jdbc:mysql://localhost:3306/mydatabase
+      DISPATCH.IP: ${{ secrets.DISPATCH.IP }}
+      S3_ACCESSKEY: ${{ secrets.S3_ACCESSKEY }}
+      S3_SECRETKEY: ${{ secrets.S3_SECRETKEY }}
+      API_KEY: ${{ secrets.API_KEY }}
+      API_SECRET: ${{ secrets.API_SECRET }}
 
     steps:
       - name: Checkout source code
