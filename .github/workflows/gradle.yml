@@ -28,15 +28,16 @@ jobs:
 
       - name: Inject Environment Variables into application.properties
         run: |
-          echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" >> src/main/resources/application.properties
-          echo "DISPATCH_IP=${{ secrets.DISPATCH_IP }}" >> src/main/resources/application.properties
-          echo "DB_URL=${{ secrets.DB_URL }}" >> src/main/resources/application.properties
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> src/main/resources/application.properties
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> src/main/resources/application.properties
-          echo "S3_ACCESSKEY=${{ secrets.S3_ACCESSKEY }}" >> src/main/resources/application.properties
-          echo "S3_SECRETKEY=${{ secrets.S3_SECRETKEY }}" >> src/main/resources/application.properties
-          echo "API_KEY=${{ secrets.API_KEY }}" >> src/main/resources/application.properties
-          echo "API_SECRET=${{ secrets.API_SECRET }}" >> src/main/resources/application.properties
+          echo "server.port=${{ secrets.SERVER_PORT }}" >> src/main/resources/application.properties
+          echo "dispatch_ip=${{ secrets.DISPATCH_IP }}" >> src/main/resources/application.properties
+          echo "db_url=${{ secrets.DB_URL }}" >> src/main/resources/application.properties
+          echo "db_username=${{ secrets.DB_USERNAME }}" >> src/main/resources/application.properties
+          echo "db_password=${{ secrets.DB_PASSWORD }}" >> src/main/resources/application.properties
+          echo "s3_accesskey=${{ secrets.S3_ACCESSKEY }}" >> src/main/resources/application.properties
+          echo "s3_secretkey=${{ secrets.S3_SECRETKEY }}" >> src/main/resources/application.properties
+          echo "api_key=${{ secrets.API_KEY }}" >> src/main/resources/application.properties
+          echo "api_secret=${{ secrets.API_SECRET }}" >> src/main/resources/application.properties
+
 
       - name: Build with Gradle
         run: ./gradlew clean build -x test
