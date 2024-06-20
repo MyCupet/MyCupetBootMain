@@ -30,7 +30,7 @@ jobs:
 
       - name: Inject Environment Variables into application.properties
         run: |
-          sed -i "s/server.port=.*/server.port=9090/" src/main/resources/application.properties
+          sed -i "s/server.port=.*/server.port=${{ secrets.SERVER_PORT }}/" src/main/resources/application.properties
           sed -i "s/dispatch_ip=.*/dispatch_ip=${{ secrets.DISPATCH_IP }}/" src/main/resources/application.properties
           sed -i "s/db_url=.*/db_url=${{ secrets.DB_URL }}/" src/main/resources/application.properties
           sed -i "s/db_username=.*/db_username=${{ secrets.DB_USERNAME }}/" src/main/resources/application.properties
@@ -59,8 +59,7 @@ jobs:
   deploy:
     needs: build
     name: Deploy
-    runs-on: [self-hosted, label-go]
-
+    runs-on: [self-host, label-go]
     steps:
       - name: Docker login
         uses: docker/login-action@v1
@@ -70,9 +69,12 @@ jobs:
 
       - name: Stop and remove existing container
         run: |
-          sudo docker pull ${{ secrets.DOCKER_REPO }}:${{ env.VER }}
           docker stop my-cupet-boot-main || true
           docker rm my-cupet-boot-main || true
+
+      - name: Pull Docker image from registry
+        run: |
+          docker pull ${{ secrets.DOCKER_REPO }}:${{ env.VER }}
 
       - name: Run Docker container
         run: |
