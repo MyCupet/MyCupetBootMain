@@ -14,74 +14,60 @@ jobs:
 
     env:
       DOCKER_IMAGE_NAME: my-cupet-boot-main  # Docker 이미지 이름
-      DOCKER_REGISTRY: starsong0422/starsongrepo  # Docker Hub 레지스트리 이름
-      SERVER_PORT: ${{ secrets.SERVER_PORT }}
-      DISPATCH_IP: ${{ secrets.DISPATCH_IP }}
-      DB_URL: ${{ secrets.DB_URL }}
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      S3_ACCESSKEY: ${{ secrets.S3_ACCESSKEY }}
-      S3_SECRETKEY: ${{ secrets.S3_SECRETKEY }}
-      API_KEY: ${{ secrets.API_KEY }}
-      API_SECRET: ${{ secrets.API_SECRET }}
-      NCP_ACCESS_KEY: ${{ secrets.NCP_ACCESS_KEY }}
-      NCP_SECRET_KEY: ${{ secrets.NCP_SECRET_KEY }}
-
+    
     steps:
       - name: Checkout 소스 코드
         uses: actions/checkout@v2
-
+    
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
           java-version: '17'
-
+    
       - name: Grant execute permission for Gradlew
         run: chmod +x ./gradlew
-
+    
+      #환경변수 설정
+      - name: Inject Environment Variables into application.properties
+        run: |
+          echo "server.port=${SERVER_PORT}" >> src/main/resources/application.properties
+          echo "dispatch.ip=${DISPATCH_IP}" >> src/main/resources/application.properties
+          echo "db.url=${DB_URL}" >> src/main/resources/application.properties
+          echo "db.username=${DB_USERNAME}" >> src/main/resources/application.properties
+          echo "db.password=${DB_PASSWORD}" >> src/main/resources/application.properties
+          echo "s3.accesskey=${S3_ACCESSKEY}" >> src/main/resources/application.properties
+          echo "s3.secretkey=${S3_SECRETKEY}" >> src/main/resources/application.properties
+          echo "api.key=${API_KEY}" >> src/main/resources/application.properties
+          echo "api.secret=${API_SECRET}" >> src/main/resources/application.properties
       - name: Build with Gradle
         run: ./gradlew clean build -x test
-
+    
       - name: Build Docker image
         run: |
           docker build -t $DOCKER_IMAGE_NAME .
-          docker tag $DOCKER_IMAGE_NAME $DOCKER_REGISTRY:latest
-
+          docker tag $DOCKER_IMAGE_NAME ${{secrets.DOCKER_REPO}}:latest
       - name: Login to Docker registry
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
+    
       - name: Push Docker image to registry
-        run: docker push $DOCKER_REGISTRY:latest
-
+        run: docker push ${{secrets.DOCKER_REPO}}:latest
+    
       - name: Deploy to NCP
-        run: |
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          SIGNATURE=$(echo -n "${TIMESTAMP}${NCP_ACCESS_KEY}${NCP_SECRET_KEY}" | openssl dgst -sha256 -hmac "${NCP_SECRET_KEY}" -binary | base64)
-          curl -X POST \
-            -H "Content-Type: application/json" \
-            -H "x-ncp-apigw-api-key: ${NCP_ACCESS_KEY}" \
-            -H "x-ncp-iam-signature-v2: ${SIGNATURE}" \
-            -H "x-ncp-apigw-timestamp: ${TIMESTAMP}" \
-            -d '{
-                  "image": "'"$DOCKER_REGISTRY:latest"'",
-                  "name": "your-app-name"
-                }' \
-            https://ncloud.apigw.ntruss.com/vserver/v2/startServerInstances
-
-      - name: Set Environment Variables
-        run: |
-          echo "SERVER_PORT=${SERVER_PORT}" >> $GITHUB_ENV
-          echo "DISPATCH_IP=${DISPATCH_IP}" >> $GITHUB_ENV
-          echo "DB_URL=${DB_URL}" >> $GITHUB_ENV
-          echo "DB_USERNAME=${DB_USERNAME}" >> $GITHUB_ENV
-          echo "DB_PASSWORD=${DB_PASSWORD}" >> $GITHUB_ENV
-          echo "S3_ACCESSKEY=${S3_ACCESSKEY}" >> $GITHUB_ENV
-          echo "S3_SECRETKEY=${S3_SECRETKEY}" >> $GITHUB_ENV
-          echo "API_KEY=${API_KEY}" >> $GITHUB_ENV
-          echo "API_SECRET=${API_SECRET}" >> $GITHUB_ENV
-          echo "NCP_ACCESS_KEY=${NCP_ACCESS_KEY}" >> $GITHUB_ENV
-          echo "NCP_SECRET_KEY=${NCP_SECRET_KEY}" >> $GITHUB_ENV
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.NCP_HOST}}
+          username: ${{secrets.NCP_ID}}
+          password: ${{secrets.NCP_PASSWORD}}
+          port: 9090
+          script: |
+            sudo docker login -u ${{secrets.NCP_ID}} -p ${{secrets.NCP_PASSWORD}}
+            sudo docker stop $(sudo docker ps -a -q)
+            sudo docker rm -f $(sudo docker ps -a -q) 
+            sudo docker pull ${{ secrets.DOCKER_REPO }}/my-project
+            sudo docker run -d -p 9090:9090 ${{ secrets.DOCKER_REPO }}/my-project
+            sudo docker image prune -f
+            ps -ef | grep 
