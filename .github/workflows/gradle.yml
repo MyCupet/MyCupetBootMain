@@ -7,6 +7,8 @@ on:
   pull_request:
     branches:
       - main
+env:
+  VER: ${{github.sha}}
 
 jobs:
   build:
@@ -48,10 +50,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_REPO }}:${{ github.sha }} .
+          docker build -t ${{ secrets.DOCKER_REPO }}:${{ env.VER }} .
 
       - name: Push Docker image to registry
-        run: docker push ${{ secrets.DOCKER_REPO }}:${{ github.sha }}
+        run: docker push ${{ secrets.DOCKER_REPO }}:${{ env.VER }}
 
   deploy:
     needs: build
@@ -72,7 +74,7 @@ jobs:
 
       - name: Run Docker container
         run: |
-          docker run -d -p 9090:9090 --name my-cupet-boot-main ${{ secrets.DOCKER_REPO }}:${{ github.sha }}
+          docker run -d -p 9090:9090 --name my-cupet-boot-main ${{ secrets.DOCKER_REPO }}:${{ env.VER }}
 
       - name: Clean up unused Docker images
         run: docker image prune -af
