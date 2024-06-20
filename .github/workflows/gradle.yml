@@ -1,34 +1,42 @@
-name: Java CI with Gradle and Docker Deploy
+name: JAVA CI WITH GRADLE AND DOCKER DEPLOY
 
 on:
   push:
     branches:
-      - main  # 배포하려는 브랜치 이름으로 변경 가능
+      - main
   pull_request:
     branches:
-      - main  # 풀 리퀘스트가 올라오면 테스트 실행
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-20.04
 
     env:
-      DOCKER_IMAGE_NAME: my-cupet-boot-main  # Docker 이미지 이름
-    
+      DOCKER_IMAGE_NAME: MY-CUPET-BOOT-MAIN
+      SERVER_PORT: ${{ secrets.SERVER_PORT }}
+      DISPATCH_IP: ${{ secrets.DISPATCH_IP }}
+      DB_URL: ${{ secrets.DB_URL }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      S3_ACCESSKEY: ${{ secrets.S3_ACCESSKEY }}
+      S3_SECRETKEY: ${{ secrets.S3_SECRETKEY }}
+      API_KEY: ${{ secrets.API_KEY }}
+      API_SECRET: ${{ secrets.API_SECRET }}
+
     steps:
       - name: Checkout 소스 코드
         uses: actions/checkout@v2
-    
+
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
           java-version: '17'
-    
+
       - name: Grant execute permission for Gradlew
         run: chmod +x ./gradlew
-    
-      #환경변수 설정
+
       - name: Inject Environment Variables into application.properties
         run: |
           echo "server.port=${SERVER_PORT}" >> src/main/resources/application.properties
@@ -40,48 +48,44 @@ jobs:
           echo "s3.secretkey=${S3_SECRETKEY}" >> src/main/resources/application.properties
           echo "api.key=${API_KEY}" >> src/main/resources/application.properties
           echo "api.secret=${API_SECRET}" >> src/main/resources/application.properties
+
       - name: Build with Gradle
         run: ./gradlew clean build -x test
 
-
-      - name: Login-to-Dokcer
+      - name: Login to Docker Hub
         env:
-          DOCKER_USERNAME: ${{secrets.DOCKERHUB_USERNAME}}
-          DOCKER_TOKEN: ${{secrets.DOCKER_TOKEN}}
-        run: echo $DOCKER_TOKEN | docker login -u $DOCKER_USERNAME --password-stdin
-    
+          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_TOKEN }}
+        run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+
       - name: Build Docker image
         run: |
           docker build -t $DOCKER_IMAGE_NAME .
-          docker tag $DOCKER_IMAGE_NAME ${{secrets.DOCKER_REPO}}:latest
-    
+          docker tag $DOCKER_IMAGE_NAME ${{ secrets.DOCKER_REPO }}:latest
+
       - name: Push Docker image to registry
-        run: docker push ${{secrets.DOCKER_REPO}}:latest
-        
+        run: docker push ${{ secrets.DOCKER_REPO }}:latest
+
   deploy:
     needs: build
     name: Deploy
-    runs-on: ubuntu-latest  # Specify the appropriate runner for your deployment needs
+    runs-on: ubuntu-latest
+
     steps:
-      - name: docker login
+      - name: Docker login
         uses: docker/login-action@v1
         with:
-          username: ${{secrets.DOCKERHUB_USERNAME}}
-          password: ${{secrets.DOCKER_TOKEN}}
-      
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
       - name: Stop and remove existing container
         run: |
-          docker stop my-cupet-boot-main || true
-          docker rm my-cupet-boot-main || true
-      
+          docker stop MY-CUPET-BOOT-MAIN || true
+          docker rm MY-CUPET-BOOT-MAIN || true
+
       - name: Run Docker container
         run: |
-          docker run -d -p 9090:9090 --name my-cupet-boot-main ${{secrets.DOCKER_REPO}}:latest
-      
+          docker run -d -p 9090:9090 --name MY-CUPET-BOOT-MAIN ${{ secrets.DOCKER_REPO }}:latest
+
       - name: Clean up unused Docker images
         run: docker image prune -af
-  
-      
-        
-      
-       
