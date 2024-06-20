@@ -46,8 +46,8 @@ jobs:
 
       - name: Login-to-Dokcer
         env:
-          DOCKER_USERNAME: ${{DOCKERHUB_USERNAME}}
-          DOCKER_TOKEN: ${{DOCKER_TOKEN}}
+          DOCKER_USERNAME: ${{secrets.DOCKERHUB_USERNAME}}
+          DOCKER_TOKEN: ${{secrets.DOCKER_TOKEN}}
         run: echo $DOCKER_TOKEN | docker login -u $DOCKER_USERNAME --password-stdin
     
       - name: Build Docker image
