@@ -41,6 +41,7 @@ jobs:
           echo "api.key=${API_KEY}" >> src/main/resources/application.properties
           echo "api.secret=${API_SECRET}" >> src/main/resources/application.properties
 
+
       - name: Build with Gradle
         run: ./gradlew clean build -x test
 
