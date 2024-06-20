@@ -7,8 +7,10 @@ on:
   pull_request:
     branches:
       - main
+
 env:
-  VER:  ${{ github.sha }}
+  VER: ${{ github.sha }}
+
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -28,16 +30,15 @@ jobs:
 
       - name: Inject Environment Variables into application.properties
         run: |
-          echo "server.port=${{ secrets.SERVER_PORT }}" >> src/main/resources/application.properties
-          echo "dispatch_ip=${{ secrets.DISPATCH_IP }}" >> src/main/resources/application.properties
-          echo "db_url=${{ secrets.DB_URL }}" >> src/main/resources/application.properties
-          echo "db_username=${{ secrets.DB_USERNAME }}" >> src/main/resources/application.properties
-          echo "db_password=${{ secrets.DB_PASSWORD }}" >> src/main/resources/application.properties
-          echo "s3_accesskey=${{ secrets.S3_ACCESSKEY }}" >> src/main/resources/application.properties
-          echo "s3_secretkey=${{ secrets.S3_SECRETKEY }}" >> src/main/resources/application.properties
-          echo "api_key=${{ secrets.API_KEY }}" >> src/main/resources/application.properties
-          echo "api_secret=${{ secrets.API_SECRET }}" >> src/main/resources/application.properties
-
+          sed -i "s/server.port=.*/server.port=${{ secrets.SERVER_PORT }}/" src/main/resources/application.properties
+          sed -i "s/dispatch_ip=.*/dispatch_ip=${{ secrets.DISPATCH_IP }}/" src/main/resources/application.properties
+          sed -i "s/db_url=.*/db_url=${{ secrets.DB_URL }}/" src/main/resources/application.properties
+          sed -i "s/db_username=.*/db_username=${{ secrets.DB_USERNAME }}/" src/main/resources/application.properties
+          sed -i "s/db_password=.*/db_password=${{ secrets.DB_PASSWORD }}/" src/main/resources/application.properties
+          sed -i "s/s3_accesskey=.*/s3_accesskey=${{ secrets.S3_ACCESSKEY }}/" src/main/resources/application.properties
+          sed -i "s/s3_secretkey=.*/s3_secretkey=${{ secrets.S3_SECRETKEY }}/" src/main/resources/application.properties
+          sed -i "s/api_key=.*/api_key=${{ secrets.API_KEY }}/" src/main/resources/application.properties
+          sed -i "s/api_secret=.*/api_secret=${{ secrets.API_SECRET }}/" src/main/resources/application.properties
 
       - name: Build with Gradle
         run: ./gradlew clean build -x test
@@ -58,7 +59,7 @@ jobs:
   deploy:
     needs: build
     name: Deploy
-    runs-on: [self-hosted, label-go ]
+    runs-on: [self-hosted, label-go]
 
     steps:
       - name: Docker login
@@ -69,7 +70,7 @@ jobs:
 
       - name: Stop and remove existing container
         run: |
-          sudo docker pull ${{secrets.DOCKER_REPO}}:${{env.VER}}
+          sudo docker pull ${{ secrets.DOCKER_REPO }}:${{ env.VER }}
           docker stop my-cupet-boot-main || true
           docker rm my-cupet-boot-main || true
 
