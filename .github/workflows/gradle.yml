@@ -58,7 +58,7 @@ jobs:
   deploy:
     needs: build
     name: Deploy
-    runs-on: [self-host, label-go]
+    runs-on: [self-hosted, label-go]
     steps:
       - name: Docker login
         uses: docker/login-action@v1
