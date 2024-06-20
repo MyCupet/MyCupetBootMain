@@ -14,7 +14,6 @@ jobs:
 
     env:
       DOCKER_IMAGE_NAME: my-cupet-boot-main  # Docker 이미지 이름
-      DOCKER_REGISTRY: starsong0422/starsongrepo  # Docker Hub 레지스트리 이름
 
     steps:
       - name: Checkout 소스 코드
@@ -48,7 +47,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t $DOCKER_IMAGE_NAME .
-          docker tag $DOCKER_IMAGE_NAME $DOCKER_REGISTRY:latest
+          docker tag $DOCKER_IMAGE_NAME ${{secrets.DOCKER_REPO}}:latest
 
       - name: Login to Docker registry
         uses: docker/login-action@v2
@@ -57,24 +56,20 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Push Docker image to registry
-        run: docker push $DOCKER_REGISTRY:latest
+        run: docker push ${{secrets.DOCKER_REPO}}:latest
 
       - name: Deploy to NCP
-        run: |
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          SIGNATURE=$(echo -n "${TIMESTAMP}${NCP_ACCESS_KEY}${NCP_SECRET_KEY}" | openssl dgst -sha256 -hmac "${NCP_SECRET_KEY}" -binary | base64)
-          curl -X POST \
-            -H "Content-Type: application/json" \
-            -H "x-ncp-apigw-api-key: ${NCP_ACCESS_KEY}" \
-            -H "x-ncp-iam-signature-v2: ${SIGNATURE}" \
-            -H "x-ncp-apigw-timestamp: ${TIMESTAMP}" \
-            -d '{
-                  "image": "'"$DOCKER_REGISTRY:latest"'",
-                  "name": "your-app-name"
-                }' \
-            https://ncloud.apigw.ntruss.com/vserver/v2/startServerInstances
-
-      - name: Set Environment Variables
-        run: |
-          echo "NCP_ACCESS_KEY=${NCP_ACCESS_KEY}" >> $GITHUB_ENV
-          echo "NCP_SECRET_KEY=${NCP_SECRET_KEY}" >> $GITHUB_ENV
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.NCP_HOST}}
+          username: ${{secrets.NCP_ID}}
+          password: ${{secrets.NCP_PASSWORD}}
+          port: 9090
+          script: |
+            sudo docker login -u ${{secrets.NCP_ID}} -p ${{secrets.NCP_PASSWORD}}
+            sudo docker stop $(sudo docker ps -a -q)
+            sudo docker rm -f $(sudo docker ps -a -q) 
+            sudo docker pull ${{ secrets.DOCKER_REPO }}/my-project
+            sudo docker run -d -p 9090:9090 ${{ secrets.DOCKER_REPO }}/my-project
+            sudo docker image prune -f
+            ps -ef | grep 
