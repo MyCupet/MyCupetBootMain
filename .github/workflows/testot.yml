@@ -3,10 +3,10 @@ name: Java CI with Gradle and Docker Deploy
 on:
   push:
     branches:
-      - main  # 배포하려는 브랜치 이름으로 변경 가능
+      - main
   pull_request:
     branches:
-      - main  # 풀 리퀘스트가 올라오면 테스트 실행
+      - main
 
 jobs:
   build-and-deploy:
@@ -28,7 +28,6 @@ jobs:
       - name: Grant execute permission for Gradlew
         run: chmod +x ./gradlew
 
-      #환경변수 설정
       - name: Inject Environment Variables into application.properties
         run: |
           echo "server.port=${SERVER_PORT}" >> src/main/resources/application.properties
@@ -41,14 +40,13 @@ jobs:
           echo "api.key=${API_KEY}" >> src/main/resources/application.properties
           echo "api.secret=${API_SECRET}" >> src/main/resources/application.properties
 
-
       - name: Build with Gradle
         run: ./gradlew clean build -x test
 
       - name: Build Docker image
         run: |
           docker build -t $DOCKER_IMAGE_NAME .
-          docker tag $DOCKER_IMAGE_NAME ${{secrets.DOCKER_REPO}}:latest
+          docker tag $DOCKER_IMAGE_NAME ${{secrets.DOCKER_REPO}}:/bootmain
 
       - name: Login to Docker registry
         uses: docker/login-action@v2
@@ -57,7 +55,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Push Docker image to registry
-        run: docker push ${{secrets.DOCKER_REPO}}:latest
+        run: docker push ${{secrets.DOCKER_REPO}}:/bootmain
 
       - name: Deploy to NCP
         uses: appleboy/ssh-action@master
@@ -70,7 +68,7 @@ jobs:
             sudo docker login -u ${{secrets.DOCKERHUB_USERNAME}} -p ${{secrets.DOCKERHUB_PASSWORD}}
             sudo docker stop $(sudo docker ps -a -q)
             sudo docker rm -f $(sudo docker ps -a -q) 
-            sudo docker pull ${{secrets.DOCKER_REPO}}:latest
-            sudo docker run -d -p 9090:9090 ${{secrets.DOCKER_REPO}}:latest
+            sudo docker pull ${{secrets.DOCKER_REPO}}:/bootmain
+            sudo docker run -d -p 9090:9090 ${{secrets.DOCKER_REPO}}:/bootmain
             sudo docker image prune -f
             ps -ef | grep java
