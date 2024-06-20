@@ -69,6 +69,7 @@ jobs:
 
       - name: Stop and remove existing container
         run: |
+          sudo docker pull ${{secrets.DOCKER_REPO}}:${{env.VER}}
           docker stop my-cupet-boot-main || true
           docker rm my-cupet-boot-main || true
 
