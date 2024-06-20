@@ -11,9 +11,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
-
-    env:
-      DOCKER_IMAGE_NAME: bootmain
       
     steps:
       - name: Checkout 소스 코드
@@ -51,11 +48,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t $DOCKER_IMAGE_NAME .
-          docker tag $DOCKER_IMAGE_NAME ${{ secrets.DOCKER_REPO }}:bootmain
-
+          docker build -t ${{ secrets.DOCKER_REPO }}:${{ github.sha }}
+    
       - name: Push Docker image to registry
-        run: docker push ${{ secrets.DOCKER_REPO }}:bootmain
+        run: docker push ${{ secrets.DOCKER_REPO }}:${{ github.sha }}
 
   deploy:
     needs: build
@@ -76,7 +72,7 @@ jobs:
 
       - name: Run Docker container
         run: |
-          docker run -d -p 9090:9090 --name my-cupet-boot-main ${{ secrets.DOCKER_REPO }}:bootmain
+          docker run -d -p 9090:9090 --name my-cupet-boot-main ${{ secrets.DOCKER_REPO }}:${{ github.sha }}
 
       - name: Clean up unused Docker images
         run: docker image prune -af
