@@ -10,6 +10,7 @@ on:
 
 env:
   VER: ${{ github.sha }}
+  SERVER_PORT: 9090
 
 jobs:
   build:
@@ -30,7 +31,6 @@ jobs:
 
       - name: Inject Environment Variables into application.properties
         run: |
-          echo "server.port=9090" >> src/main/resources/application.properties
           echo "dispatch_ip=${{ secrets.DISPATCH_IP }}" >> src/main/resources/application.properties
           echo "db_url=${{ secrets.DB_URL }}" >> src/main/resources/application.properties
           echo "db_username=${{ secrets.DB_USERNAME }}" >> src/main/resources/application.properties
