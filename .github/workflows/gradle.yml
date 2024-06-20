@@ -19,6 +19,13 @@ jobs:
     env:
       SERVER_PORT: 9090
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_URL: jdbc:mysql://localhost:3306/mydatabase
+      DISPATCH.IP: ${{secrets.DISPATCH.IP}}
+      S3_ACCESSKEY: ${{ secrets.S3_ACCESSKEY }}
+      S3_SECRETKEY: ${{ secrets.S3_SECRETKEY }}
+      API_KEY: ${{ secrets.API_KEY }}
+      API_SECRET: ${{ secrets.API_SECRET }}
       
     steps:
       - name: Checkout source code
@@ -33,16 +40,6 @@ jobs:
       - name: Grant execute permission for Gradlew
         run: chmod +x ./gradlew
 
-      - name: Inject Environment Variables into application.properties
-        run: |
-          echo "dispatch_ip=${{ secrets.DISPATCH_IP }}" >> src/main/resources/application.properties
-          echo "db_url=${{ secrets.DB_URL }}" >> src/main/resources/application.properties
-          echo "db_username=${{ secrets.DB_USERNAME }}" >> src/main/resources/application.properties
-          echo "db_password=${{ secrets.DB_PASSWORD }}" >> src/main/resources/application.properties
-          echo "s3_accesskey=${{ secrets.S3_ACCESSKEY }}" >> src/main/resources/application.properties
-          echo "s3_secretkey=${{ secrets.S3_SECRETKEY }}" >> src/main/resources/application.properties
-          echo "api_key=${{ secrets.API_KEY }}" >> src/main/resources/application.properties
-          echo "api_secret=${{ secrets.API_SECRET }}" >> src/main/resources/application.properties
       - name: Build with Gradle
         run: ./gradlew clean build -x test
 
