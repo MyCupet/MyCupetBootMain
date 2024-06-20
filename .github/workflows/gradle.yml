@@ -10,11 +10,15 @@ on:
 
 env:
   VER: ${{ github.sha }}
-  SERVER_PORT: 9090
+
 
 jobs:
   build:
     runs-on: ubuntu-20.04
+
+    env:
+      SERVER_PORT: 9090
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
       
     steps:
       - name: Checkout source code
