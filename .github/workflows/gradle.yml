@@ -64,7 +64,7 @@ jobs:
           password: ${{secrets.NCP_PASSWORD}}
           port: 9090
           script: |
-            sudo docker login -u ${{secrets.NCP_ID}} -p ${{secrets.NCP_PASSWORD}}
+            sudo docker login -u ${{secrets.DOCKERHUB_USERNAME}} -p ${{secrets.DOCKERHUB_PASSWORD}}
             sudo docker stop $(sudo docker ps -a -q)
             sudo docker rm -f $(sudo docker ps -a -q) 
             sudo docker pull ${{ secrets.DOCKER_REPO }}/my-project
