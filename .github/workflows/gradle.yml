@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-20.04
 
     env:
-      DOCKER_IMAGE_NAME: MY-CUPET-BOOT-MAIN
+      DOCKER_IMAGE_NAME: my-cupet-boot-main
       SERVER_PORT: ${{ secrets.SERVER_PORT }}
       DISPATCH_IP: ${{ secrets.DISPATCH_IP }}
       DB_URL: ${{ secrets.DB_URL }}
@@ -81,12 +81,12 @@ jobs:
 
       - name: Stop and remove existing container
         run: |
-          docker stop MY-CUPET-BOOT-MAIN || true
-          docker rm MY-CUPET-BOOT-MAIN || true
+          docker stop my-cupet-boot-main || true
+          docker rm my-cupet-boot-main || true
 
       - name: Run Docker container
         run: |
-          docker run -d -p 9090:9090 --name MY-CUPET-BOOT-MAIN ${{ secrets.DOCKER_REPO }}:latest
+          docker run -d -p 9090:9090 --name my-cupet-boot-main ${{ secrets.DOCKER_REPO }}:latest
 
       - name: Clean up unused Docker images
         run: docker image prune -af
