@@ -79,35 +79,30 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
-
-      - name: Pull Docker image from registry
-        run: |
-          docker pull ${{ secrets.DOCKER_REPO }}:${{ env.VER }}
-    
-    
+  
       - name: Stop and remove existing container
         run: |
           docker stop my-cupet-boot-main || true
           docker rm my-cupet-boot-main || true
-    
+  
       - name: Pull Docker image from registry
         run: |
-          docker pull ${{ secrets.DOCKER_REPO }}:${{ env.VER }}
-    
+          docker pull "${{ secrets.DOCKER_REPO }}:${{ env.VER }}"
+  
       - name: Run Docker container
         run: |
           docker run -d -p 9090:9090 \
-            -e VER=${{ env.VER }} \
             -e SERVER_PORT=${{ env.SERVER_PORT }} \
-            -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
-            -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
+            -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
             -e DB_URL="jdbc:mysql://localhost:3306/mydatabase" \
-            -e DISPATCH.IP=${{ secrets.DISPATCH.IP }} \  # Corrected variable name
-            -e S3_ACCESSKEY=${{ secrets.S3_ACCESSKEY }} \
-            -e S3_SECRETKEY=${{ secrets.S3_SECRETKEY }} \
-            -e API_KEY=${{ secrets.API_KEY }} \
-            -e API_SECRET=${{ secrets.API_SECRET }} \
-            --name my-cupet-boot-main ${{ secrets.DOCKER_REPO }}:${{ env.VER }}
-    
+            -e DISPATCH.IP="${{ secrets.DISPATCH.IP }}" \
+            -e S3_ACCESSKEY="${{ secrets.S3_ACCESSKEY }}" \
+            -e S3_SECRETKEY="${{ secrets.S3_SECRETKEY }}" \
+            -e API_KEY="${{ secrets.API_KEY }}" \
+            -e API_SECRET="${{ secrets.API_SECRET }}" \
+            --name my-cupet-boot-main \
+            "${{ secrets.DOCKER_REPO }}:${{ env.VER }}"
+  
       - name: Clean up unused Docker images
         run: docker image prune -af
