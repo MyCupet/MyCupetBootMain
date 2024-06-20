@@ -14,16 +14,7 @@ jobs:
 
     env:
       DOCKER_IMAGE_NAME: my-cupet-boot-main
-      SERVER_PORT: ${{ secrets.SERVER_PORT }}
-      DISPATCH_IP: ${{ secrets.DISPATCH_IP }}
-      DB_URL: ${{ secrets.DB_URL }}
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      S3_ACCESSKEY: ${{ secrets.S3_ACCESSKEY }}
-      S3_SECRETKEY: ${{ secrets.S3_SECRETKEY }}
-      API_KEY: ${{ secrets.API_KEY }}
-      API_SECRET: ${{ secrets.API_SECRET }}
-
+      
     steps:
       - name: Checkout 소스 코드
         uses: actions/checkout@v2
@@ -40,15 +31,15 @@ jobs:
 
       - name: Inject Environment Variables into application.properties
         run: |
-          echo "server.port=${SERVER_PORT}" >> src/main/resources/application.properties
-          echo "dispatch.ip=${DISPATCH_IP}" >> src/main/resources/application.properties
-          echo "db.url=${DB_URL}" >> src/main/resources/application.properties
-          echo "db.username=${DB_USERNAME}" >> src/main/resources/application.properties
-          echo "db.password=${DB_PASSWORD}" >> src/main/resources/application.properties
-          echo "s3.accesskey=${S3_ACCESSKEY}" >> src/main/resources/application.properties
-          echo "s3.secretkey=${S3_SECRETKEY}" >> src/main/resources/application.properties
-          echo "api.key=${API_KEY}" >> src/main/resources/application.properties
-          echo "api.secret=${API_SECRET}" >> src/main/resources/application.properties
+          echo "SERVER_PORT: ${{ secrets.SERVER_PORT }}" >> src/main/resources/application.properties
+          echo "DISPATCH_IP: ${{ secrets.DISPATCH_IP }}" >> src/main/resources/application.properties
+          echo "DB_URL: ${{ secrets.DB_URL }}" >> src/main/resources/application.properties
+          echo "DB_USERNAME: ${{ secrets.DB_USERNAME }}" >> src/main/resources/application.properties
+          echo "DB_PASSWORD: ${{ secrets.DB_PASSWORD }}" >> src/main/resources/application.properties
+          echo "S3_ACCESSKEY: ${{ secrets.S3_ACCESSKEY }}" >> src/main/resources/application.properties
+          echo "S3_SECRETKEY: ${{ secrets.S3_SECRETKEY }}" >> src/main/resources/application.properties
+          echo "API_KEY: ${{ secrets.API_KEY }}" >> src/main/resources/application.properties
+          echo "API_SECRET: ${{ secrets.API_SECRET }}" >> src/main/resources/application.properties
 
       - name: Build with Gradle
         run: ./gradlew clean build -x test
