@@ -65,6 +65,7 @@ jobs:
           username: ${{secrets.NCP_ID}}
           password: ${{secrets.NCP_PASSWORD}}
           port: 8080
+          
           script: |
             sudo docker login -u ${{secrets.DOCKERHUB_USERNAME}} -p ${{secrets.DOCKERHUB_PASSWORD}}
             sudo docker stop $(sudo docker ps -q --filter ancestor=${{secrets.DOCKER_REPO}}:latest)
