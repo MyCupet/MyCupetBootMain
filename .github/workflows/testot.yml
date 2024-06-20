@@ -3,17 +3,19 @@ name: Java CI with Gradle and Docker Deploy
 on:
   push:
     branches:
-      - main
+      - main  # 배포하려는 브랜치 이름으로 변경 가능
   pull_request:
     branches:
-      - main
+      - main  # 풀 리퀘스트가 올라오면 테스트 실행
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     env:
-      SERVER_PORT: 9090
+      DOCKER_IMAGE_NAME: my-cupet-boot-main  # Docker 이미지 이름
+      DOCKER_REGISTRY: starsong0422/starsongrepo  # Docker Hub 레지스트리 이름
+      SERVER_PORT: ${{ secrets.SERVER_PORT }}
       DISPATCH_IP: ${{ secrets.DISPATCH_IP }}
       DB_URL: ${{ secrets.DB_URL }}
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
@@ -22,8 +24,6 @@ jobs:
       S3_SECRETKEY: ${{ secrets.S3_SECRETKEY }}
       API_KEY: ${{ secrets.API_KEY }}
       API_SECRET: ${{ secrets.API_SECRET }}
-      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-      DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
       NCP_ACCESS_KEY: ${{ secrets.NCP_ACCESS_KEY }}
       NCP_SECRET_KEY: ${{ secrets.NCP_SECRET_KEY }}
 
@@ -45,24 +45,28 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t mydockerhubusername/my-cupet-boot-main:latest .
-          docker tag mydockerhubusername/my-cupet-boot-main:latest mydockerhubusername/my-cupet-boot-main:latest
+          docker build -t $DOCKER_IMAGE_NAME .
+          docker tag $DOCKER_IMAGE_NAME $DOCKER_REGISTRY:latest
 
       - name: Login to Docker registry
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Push Docker image to registry
-        run: docker push mydockerhubusername/my-cupet-boot-main:latest
+        run: docker push $DOCKER_REGISTRY:latest
 
       - name: Deploy to NCP
         run: |
           curl -X POST \
-            -u "${{ secrets.NCP_ACCESS_KEY }}:${{ secrets.NCP_SECRET_KEY }}" \
             -H "Content-Type: application/json" \
-            -d '{"image": "mydockerhubusername/my-cupet-boot-main:latest", "name": "my-cupet-boot-main", "port": 9090}' \
+            -d '{
+                  "image": "'"$DOCKER_REGISTRY:latest"'",
+                  "name": "your-app-name",
+                  "accessKey": "'"$NCP_ACCESS_KEY"'",
+                  "secretKey": "'"$NCP_SECRET_KEY"'"
+                }' \
             https://ncloud.apigw.ntruss.com/vserver/v2/startServerInstances
 
       - name: Set Environment Variables
@@ -76,3 +80,5 @@ jobs:
           echo "S3_SECRETKEY=${S3_SECRETKEY}" >> $GITHUB_ENV
           echo "API_KEY=${API_KEY}" >> $GITHUB_ENV
           echo "API_SECRET=${API_SECRET}" >> $GITHUB_ENV
+          echo "NCP_ACCESS_KEY=${NCP_ACCESS_KEY}" >> $GITHUB_ENV
+          echo "NCP_SECRET_KEY=${NCP_SECRET_KEY}" >> $GITHUB_ENV
