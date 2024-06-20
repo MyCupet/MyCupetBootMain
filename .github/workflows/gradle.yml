@@ -59,7 +59,7 @@ jobs:
       - name: Deploy to NCP
         uses: appleboy/ssh-action@master
         with:
-          host: ${{secrets.NCP_DNS}}
+          host: ${{secrets.NCP_HOST}}
           username: ${{secrets.NCP_ID}}
           password: ${{secrets.NCP_PASSWORD}}
           port : 9090
