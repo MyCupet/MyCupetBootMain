@@ -57,7 +57,7 @@ jobs:
   deploy:
     needs: build
     name: Deploy
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, label-go ]
 
     steps:
       - name: Docker login
