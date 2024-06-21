@@ -11,14 +11,6 @@ on:
 env:
   VER: ${{ github.sha }}
   SERVER_PORT: 9090
-  DB_USERNAME: ${{ secrets.DB_USERNAME }}
-  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-  DB_URL: ${{secrets.DB_URL}}
-  DISPATCH_IP: ${{ secrets.DISPATCH.IP }}
-  S3_ACCESSKEY: ${{ secrets.S3_ACCESSKEY }}
-  S3_SECRETKEY: ${{ secrets.S3_SECRETKEY }}
-  API_KEY: ${{ secrets.API_KEY }}
-  API_SECRET: ${{ secrets.API_SECRET }}
 
 jobs:
   build:
